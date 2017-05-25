@@ -1,4 +1,4 @@
-package by.vshkl.android.piktures.ui
+package by.vshkl.android.piktures
 
 import io.reactivex.disposables.Disposable
 import com.arellomobile.mvp.MvpPresenter

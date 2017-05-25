@@ -23,7 +23,7 @@ open class BaseFragment : MvpAppCompatFragment() {
         super.onDetach()
     }
 
-    fun getParrentActivity(): MainActivity? {
+    fun getParentActivity(): MainActivity? {
         return parentActivityRef?.get()
     }
 }

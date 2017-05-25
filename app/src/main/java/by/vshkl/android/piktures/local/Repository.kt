@@ -1,17 +1,17 @@
 package by.vshkl.android.piktures.local
 
-
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore.Images.ImageColumns.*
 import android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 import android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI
 import by.vshkl.android.piktures.model.Album
+import by.vshkl.android.piktures.model.Image
 import io.reactivex.Observable
 import java.lang.ref.WeakReference
+import java.util.Collections.emptyList
 
-
-class Repository {
+object Repository {
 
     private val projectionAlbum = arrayOf(_ID, DATA, DISPLAY_NAME, MIME_TYPE)
     private val projectionAlbumThumbnail = arrayOf(BUCKET_ID, DATA)
@@ -30,6 +30,14 @@ class Repository {
         emitter.onNext(albums)
     })
 
+    fun getImages(contextRef: WeakReference<Context>, albumId: String): Observable<MutableList<Image>>
+            = Observable.create({ emitter ->
+        val images = getImages(contextRef.get(), INTERNAL_CONTENT_URI, projectionAlbum, albumId, sortOrderDateDesc)
+        images.addAll(getImages(contextRef.get(), EXTERNAL_CONTENT_URI, projectionAlbum, albumId, sortOrderDateDesc))
+        contextRef.clear()
+        emitter.onNext(images)
+    })
+
     //------------------------------------------------------------------------------------------------------------------
 
     private fun getAlbums(context: Context, storageUri: Uri, projection: Array<String>, sortOrder: String)
@@ -38,6 +46,9 @@ class Repository {
 
         val albums: MutableList<Album> = emptyList<Album>().toMutableList()
 
+        if (cursor == null) {
+            return albums
+        }
         while (cursor.moveToNext()) {
             val album = Album(
                     cursor.getString(cursor.getColumnIndex(BUCKET_ID)),
@@ -72,5 +83,28 @@ class Repository {
         val albumThumbnail = cursor.getString(cursor.getColumnIndex(DATA))
         cursor.close()
         return albumThumbnail
+    }
+
+    private fun getImages(context: Context?, storageUri: Uri, projection: Array<String>, albumId: String,
+                          sortOrder: String): MutableList<Image> {
+        val cursor = context?.contentResolver?.query(storageUri, projection, selectByBucketId, arrayOf(albumId), sortOrder)
+
+        val images: MutableList<Image> = emptyList<Image>().toMutableList()
+
+        if (cursor == null) {
+            return images
+        }
+        while (cursor.moveToNext()) {
+            val image: Image = Image(
+                    cursor.getLong(cursor.getColumnIndex(_ID)),
+                    cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)),
+                    cursor.getString(cursor.getColumnIndex(DATA)),
+                    cursor.getString(cursor.getColumnIndex(MIME_TYPE))
+            )
+            images.add(image)
+        }
+
+        cursor.close()
+        return images
     }
 }

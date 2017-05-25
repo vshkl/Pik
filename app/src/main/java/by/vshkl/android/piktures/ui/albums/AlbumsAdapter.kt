@@ -61,8 +61,8 @@ class AlbumsAdapter(private val itemSize: Int) : DragSelectRecyclerViewAdapter<A
 
     override fun getItemCount(): Int = albums?.size ?: 0
 
-    fun setAlbums(albums: List<Album>) {
-        this.albums = albums.toMutableList()
+    fun setAlbums(albums: MutableList<Album>) {
+        this.albums = albums
     }
 
     fun setAlbumsListener(albumsListener: AlbumsListener?) {

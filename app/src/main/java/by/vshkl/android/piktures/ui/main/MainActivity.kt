@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import by.vshkl.android.piktures.R
+import by.vshkl.android.piktures.model.Album
 import by.vshkl.android.piktures.util.Navigation
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -16,7 +17,6 @@ class MainActivity : MvpAppCompatActivity(),
         MainView, OnScanCompletedListener {
 
     @InjectPresenter lateinit var mainPresenter: MainPresenter
-    val navigation: Navigation = Navigation()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,9 +28,13 @@ class MainActivity : MvpAppCompatActivity(),
 
     override fun onScanCompleted(path: String?, uri: Uri?) = mainPresenter.showAlbums()
 
-    override fun showAlbums() = navigation.navigateToAlbums(this)
-
     //---[ View implementation ]----------------------------------------------------------------------------------------
+
+    override fun showAlbums() = Navigation.navigateToAlbums(this)
+
+    override fun showAlbum(album: Album?) = Navigation.navigateToAlbum(this, album)
+
+    //---[ Other ]------------------------------------------------------------------------------------------------------
 
     override fun checkStoragePermission() {
         val rxPermissions: RxPermissions = RxPermissions(this)
@@ -44,8 +48,6 @@ class MainActivity : MvpAppCompatActivity(),
                     }
                 }
     }
-
-    //---[ Other ]------------------------------------------------------------------------------------------------------
 
     private fun scanMedia() = MediaScannerConnection
             .scanFile(this, arrayOf(Environment.getExternalStorageDirectory().toString()), null, this)

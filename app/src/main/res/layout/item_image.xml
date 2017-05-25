@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<by.vshkl.android.piktures.customview.SquareFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:id="@+id/ivImageThumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription"
+        />
+
+    <ImageView
+        android:id="@+id/ivCheck"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="top|start"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_check_circle"
+        tools:ignore="ContentDescription"
+        tools:visibility="visible"
+        />
+
+</by.vshkl.android.piktures.customview.SquareFrameLayout>
