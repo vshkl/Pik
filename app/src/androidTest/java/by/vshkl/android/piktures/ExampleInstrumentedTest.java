@@ -1,4 +1,4 @@
-package by.vshkl.android.easepic;
+package by.vshkl.android.piktures;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

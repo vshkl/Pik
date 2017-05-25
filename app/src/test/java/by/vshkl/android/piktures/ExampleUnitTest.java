@@ -1,4 +1,4 @@
-package by.vshkl.android.easepic;
+package by.vshkl.android.piktures;
 
 import org.junit.Test;
 

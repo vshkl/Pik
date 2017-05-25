@@ -1,3 +1,19 @@
 <resources>
-    <string name="app_name">EasePic</string>
+    <string name="app_name">Piktures</string>
+
+    <string name="main_permission_storage_rationale">EasePic needs storage access to show and modify pictures on device.</string>
+    <string name="main_grant">Grant</string>
+
+    <string name="all_menu_selected">%1$d/%2$d</string>
+    <string name="all_menu_action_delete">Delete</string>
+    <string name="all_menu_action_edit">Edit</string>
+    <string name="all_menu_action_info">Info</string>
+    <string name="all_menu_action_rename">Rename</string>
+    <string name="all_menu_action_share">Share</string>
+
+    <string name="all_action_share_title">Share to…</string>
+
+    <string name="image_info_title">Info</string>
+    <string name="image_info_details">Details</string>
+
 </resources>

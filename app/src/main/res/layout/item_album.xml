@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<by.vshkl.android.piktures.customview.SquareFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:id="@+id/ivAlbumThumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription"
+        tools:src="@mipmap/ic_launcher"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/colorSemitransparentBlack"
+        android:orientation="vertical"
+        android:paddingBottom="4dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="4dp"
+        >
+
+        <TextView
+            android:id="@+id/tvAlbumName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:lines="1"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:text="Camera"
+            />
+
+        <TextView
+            android:id="@+id/tvAlbumCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:lines="1"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:text="4200"
+            />
+
+    </LinearLayout>
+
+</by.vshkl.android.piktures.customview.SquareFrameLayout>
