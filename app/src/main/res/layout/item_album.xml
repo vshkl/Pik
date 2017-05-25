@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
     <ImageView
@@ -13,6 +14,19 @@
         android:scaleType="centerCrop"
         tools:ignore="ContentDescription"
         tools:src="@mipmap/ic_launcher"
+        />
+
+    <ImageView
+        android:id="@+id/ivCheck"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="top|start"
+        android:layout_margin="8dp"
+        android:elevation="4dp"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_check_circle"
+        tools:ignore="ContentDescription"
+        tools:visibility="visible"
         />
 
     <LinearLayout

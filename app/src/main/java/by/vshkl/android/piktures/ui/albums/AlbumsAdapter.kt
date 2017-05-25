@@ -1,17 +1,20 @@
 package by.vshkl.android.piktures.ui.albums
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import by.vshkl.android.piktures.R
 import by.vshkl.android.piktures.model.Album
+import by.vshkl.android.piktures.util.Dimentions
 import com.afollestad.dragselectrecyclerview.DragSelectRecyclerViewAdapter
 import com.bumptech.glide.Glide
 
-class AlbumsAdapter(private var itemSize: Int) : DragSelectRecyclerViewAdapter<AlbumsViewHolder>() {
+class AlbumsAdapter(private val itemSize: Int) : DragSelectRecyclerViewAdapter<AlbumsViewHolder>() {
 
     private var albums: MutableList<Album>? = null
     private var albumsListener: AlbumsListener? = null
     private var isSelectingMode = false
+    private var padding = Dimentions.px2dp(8F).toInt()
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AlbumsViewHolder
             = AlbumsViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.item_album, parent, false))
@@ -27,6 +30,13 @@ class AlbumsAdapter(private var itemSize: Int) : DragSelectRecyclerViewAdapter<A
                 .override(itemSize, itemSize)
                 .centerCrop()
                 .into(holder?.ivThumbnail)
+        if (isIndexSelected(position)) {
+            holder?.ivCheck?.visibility = View.VISIBLE
+            holder?.itemView?.setPadding(padding, padding, padding, padding)
+        } else {
+            holder?.ivCheck?.visibility = View.GONE
+            holder?.itemView?.setPadding(0, 0, 0, 0)
+        }
         holder?.tvName?.text = album?.name
         holder?.tvCount?.text = album?.count.toString()
         holder?.itemView?.setOnClickListener({

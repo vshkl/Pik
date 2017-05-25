@@ -11,6 +11,7 @@ import android.widget.Toast
 import by.vshkl.android.piktures.BaseFragment
 import by.vshkl.android.piktures.R
 import by.vshkl.android.piktures.model.Album
+import by.vshkl.android.piktures.util.Dimentions
 import com.afollestad.dragselectrecyclerview.DragSelectRecyclerViewAdapter.SelectionListener
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_gallery.*
@@ -153,7 +154,6 @@ class AlbumsFragment : BaseFragment(), AlbumView, AlbumsListener, SelectionListe
     }
 
     private fun finishActionMode() {
-        println("CALLEDCALLEDCALLEDCALLEDCALLEDCALLEDCALLEDCALLEDCALLEDCALLED")
         actionMode?.finish()
         actionMode = null
         menu = null
