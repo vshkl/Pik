@@ -3,6 +3,7 @@ package by.vshkl.android.piktures.ui.album
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.view.ActionMode
 import android.support.v7.view.ActionMode.Callback
 import android.support.v7.widget.GridLayoutManager
@@ -29,9 +30,8 @@ class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListene
         album = arguments.getParcelable(KEY_ALBUM)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_gallery, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?
+            = inflater?.inflate(R.layout.fragment_gallery, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -78,7 +78,7 @@ class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListene
     //---[ Listeners ]--------------------------------------------------------------------------------------------------
 
     override fun onImageClicked(images: List<Image>?, startPosition: Int) {
-
+        getParentActivity()?.mainPresenter?.showImagePager(images, startPosition)
     }
 
     override fun onImageSelectionClicked(index: Int) {
@@ -156,7 +156,7 @@ class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListene
     companion object {
         private val KEY_ALBUM = "AlbumFragment.KEY_ALBUM"
 
-        fun newInstance(album: Album?): AlbumFragment {
+        fun newInstance(album: Album?): Fragment {
             val args: Bundle = Bundle()
             args.putParcelable(KEY_ALBUM, album)
             val fragment: AlbumFragment = AlbumFragment()

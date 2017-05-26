@@ -9,7 +9,6 @@ data class Album(
         var thumbnail: String = "",
         var count: Int = 0
 ) : Parcelable {
-
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<Album> = object : Parcelable.Creator<Album> {
             override fun createFromParcel(source: Parcel): Album = Album(source)
