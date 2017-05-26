@@ -3,6 +3,7 @@ package by.vshkl.android.piktures.ui.albums
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.view.ActionMode
 import android.support.v7.view.ActionMode.Callback
 import android.support.v7.widget.GridLayoutManager
@@ -22,9 +23,8 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, SelectionList
     private var actionMode: ActionMode? = null
     private var menu: Menu? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_gallery, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?
+            = inflater?.inflate(R.layout.fragment_gallery, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -127,7 +127,7 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, SelectionList
     //---[ Other ]------------------------------------------------------------------------------------------------------
 
     companion object {
-        fun newInstance(): AlbumsFragment = AlbumsFragment()
+        fun newInstance(): Fragment = AlbumsFragment()
     }
 
     private fun initRecyclerView(savedInstanceState: Bundle?) {

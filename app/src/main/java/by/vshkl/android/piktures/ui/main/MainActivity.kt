@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Environment
 import by.vshkl.android.piktures.R
 import by.vshkl.android.piktures.model.Album
+import by.vshkl.android.piktures.model.Image
 import by.vshkl.android.piktures.util.Navigation
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -33,6 +34,9 @@ class MainActivity : MvpAppCompatActivity(),
     override fun showAlbums() = Navigation.navigateToAlbums(this)
 
     override fun showAlbum(album: Album?) = Navigation.navigateToAlbum(this, album)
+
+    override fun showImagePager(images: List<Image>?, startPosition: Int)
+            = Navigation.navigateToImagePager(this, images, startPosition)
 
     //---[ Other ]------------------------------------------------------------------------------------------------------
 

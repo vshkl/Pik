@@ -7,7 +7,6 @@ import by.vshkl.android.piktures.util.RxUtils
 import com.arellomobile.mvp.InjectViewState
 import java.lang.ref.WeakReference
 
-
 @InjectViewState
 class AlbumPresenter : BasePresenter<AlbumView>() {
 
