@@ -114,6 +114,7 @@ class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListene
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_share -> {
+                getParentActivity()?.mainPresenter?.shareImages(albumAdapter?.getSelectedImagePaths())
                 finishActionMode()
                 return true
             }

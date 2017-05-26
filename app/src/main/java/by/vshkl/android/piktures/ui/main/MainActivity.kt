@@ -38,6 +38,8 @@ class MainActivity : MvpAppCompatActivity(),
     override fun showImagePager(images: List<Image>?, startPosition: Int)
             = Navigation.navigateToImagePager(this, images, startPosition)
 
+    override fun shareImages(imagePaths: List<String>?) = Navigation.shareImages(this, imagePaths)
+
     //---[ Other ]------------------------------------------------------------------------------------------------------
 
     override fun checkStoragePermission() {

@@ -9,9 +9,12 @@ import com.github.piasy.biv.view.BigImageView
 
 class ImagePagerAdapter(private var images: List<Image>?) : PagerAdapter() {
 
+    var imagePagerListener: ImagePagerListener? = null
+
     override fun instantiateItem(container: ViewGroup?, position: Int): Any {
         val bigImageView: BigImageView = BigImageView(container?.context)
         bigImageView.showImage(Uri.parse("file:" + images?.get(position)?.image))
+        bigImageView.setOnClickListener { imagePagerListener?.onImageClicked() }
         container?.addView(bigImageView)
         return bigImageView
     }
@@ -24,5 +27,9 @@ class ImagePagerAdapter(private var images: List<Image>?) : PagerAdapter() {
 
     override fun isViewFromObject(view: View?, `object`: Any?): Boolean {
         return view == `object`
+    }
+
+    fun getImagePath(position: Int) : List<String> {
+        return listOf(images?.get(position)?.image!!)
     }
 }

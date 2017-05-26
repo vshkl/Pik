@@ -23,4 +23,8 @@ class MainPresenter : BasePresenter<MainView>() {
     fun showImagePager(images: List<Image>?, startPosition: Int) {
         viewState.showImagePager(images, startPosition)
     }
+
+    fun shareImages(imagePaths: List<String>?) {
+        viewState.shareImages(imagePaths)
+    }
 }

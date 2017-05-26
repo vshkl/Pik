@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import by.vshkl.android.piktures.BaseFragment
 import by.vshkl.android.piktures.R
@@ -12,7 +13,7 @@ import by.vshkl.android.piktures.model.Image
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_image_pager.*
 
-class ImagePagerFragment : BaseFragment(), ImagePagerView {
+class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, ImagePagerListener {
 
     @InjectPresenter lateinit var imagePagerPresenter: ImagePagerPresenter
     private var startPosition: Int = 0
@@ -32,15 +33,21 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView {
         getParentActivity()?.setSupportActionBar(tbToolbar)
         getParentActivity()?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         getParentActivity()?.supportActionBar?.setDisplayShowTitleEnabled(false)
+        ivActionShare.setOnClickListener(this)
+        ivActionEdit.setOnClickListener(this)
+        ivActionInfo.setOnClickListener(this)
+        ivActionDelete.setOnClickListener(this)
         setHasOptionsMenu(true)
         setupViewPager()
     }
 
     override fun onResume() {
         super.onResume()
+        imagePagerAdapter?.imagePagerListener = this
     }
 
     override fun onPause() {
+        imagePagerAdapter?.imagePagerListener = null
         super.onPause()
     }
 
@@ -60,6 +67,19 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView {
     }
 
     //---[ Listeners ]--------------------------------------------------------------------------------------------------
+
+    override fun onClick(v: View?) {
+        when (v) {
+            ivActionShare -> getParentActivity()?.mainPresenter?.shareImages(imagePagerAdapter?.getImagePath(vpPager.currentItem))
+            ivActionEdit -> println("Edit")
+            ivActionInfo -> println("Info")
+            ivActionDelete -> println("Delete")
+        }
+    }
+
+    override fun onImageClicked() {
+        println("On image clicked")
+    }
 
     //---[ View implementation ]----------------------------------------------------------------------------------------
 

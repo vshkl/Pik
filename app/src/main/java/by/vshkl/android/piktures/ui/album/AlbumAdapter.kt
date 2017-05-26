@@ -63,4 +63,8 @@ class AlbumAdapter(private val itemSize: Int) : DragSelectRecyclerViewAdapter<Al
     fun setSelectionMode(isSelectionMode: Boolean) {
         this.isSelectingMode = isSelectionMode
     }
+
+    fun getSelectedImagePaths(): List<String>? = images
+            ?.filter { selectedIndices.contains(images?.indexOf(it)) }
+            ?.map { it.image }
 }
