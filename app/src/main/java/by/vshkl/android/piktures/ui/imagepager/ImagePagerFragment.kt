@@ -10,18 +10,18 @@ import by.vshkl.android.piktures.BaseFragment
 import by.vshkl.android.piktures.R
 import by.vshkl.android.piktures.model.Image
 import com.arellomobile.mvp.presenter.InjectPresenter
-import kotlinx.android.synthetic.main.fragment_gallery.*
+import kotlinx.android.synthetic.main.fragment_image_pager.*
 
 class ImagePagerFragment : BaseFragment(), ImagePagerView {
 
     @InjectPresenter lateinit var imagePagerPresenter: ImagePagerPresenter
-    private var images: List<Image>? = null
-    private var startPosition: Int? = 0
+    private var startPosition: Int = 0
+    private var imagePagerAdapter: ImagePagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        images = arguments.getParcelableArrayList(KEY_IMAGE_LIST)
         startPosition = arguments.getInt(KEY_START_POSITION, 0)
+        imagePagerAdapter = ImagePagerAdapter(arguments.getParcelableArrayList(KEY_IMAGE_LIST))
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -33,6 +33,7 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView {
         getParentActivity()?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         getParentActivity()?.supportActionBar?.setDisplayShowTitleEnabled(false)
         setHasOptionsMenu(true)
+        setupViewPager()
     }
 
     override fun onResume() {
@@ -41,10 +42,6 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView {
 
     override fun onPause() {
         super.onPause()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
     }
 
     override fun onDetach() {
@@ -80,5 +77,10 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView {
             fragment.arguments = args
             return fragment
         }
+    }
+
+    private fun setupViewPager() {
+        vpPager.adapter = imagePagerAdapter
+        vpPager.currentItem = startPosition
     }
 }
