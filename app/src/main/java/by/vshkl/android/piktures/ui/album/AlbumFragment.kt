@@ -119,6 +119,7 @@ class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListene
                 return true
             }
             R.id.action_info -> {
+                getParentActivity()?.mainPresenter?.showImageInfo(albumAdapter?.getSelectedImagePaths()?.get(0))
                 finishActionMode()
                 return true
             }
