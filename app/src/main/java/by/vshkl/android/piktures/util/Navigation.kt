@@ -2,6 +2,7 @@ package by.vshkl.android.piktures.util
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.FileProvider
@@ -10,6 +11,7 @@ import by.vshkl.android.piktures.model.Album
 import by.vshkl.android.piktures.model.Image
 import by.vshkl.android.piktures.ui.album.AlbumFragment
 import by.vshkl.android.piktures.ui.albums.AlbumsFragment
+import by.vshkl.android.piktures.ui.imageinfo.ImageInfoFragment
 import by.vshkl.android.piktures.ui.imagepager.ImagePagerFragment
 import java.io.File
 
@@ -29,6 +31,11 @@ object Navigation {
         replaceFragment(activity, ImagePagerFragment.newInstance(ArrayList(images), startPosition), true)
     }
 
+    fun showImageInfoDialog(activity: FragmentActivity, imagePath: String?) {
+        val fragment = ImageInfoFragment.newInstance(imagePath)
+        fragment.show(activity.supportFragmentManager, fragment.tag)
+    }
+
     fun shareImages(context: Context, imagePaths: List<String>?) {
         val intent = Intent(Intent.ACTION_SEND_MULTIPLE)
         intent.type = "image/*"
@@ -36,6 +43,15 @@ object Navigation {
         intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM,
                 ArrayList(imagePaths?.map { FileProvider.getUriForFile(context, AUTHORITY, File(it)) }))
         context.startActivity(Intent.createChooser(intent, context.getString(R.string.all_action_share_title)))
+    }
+
+    fun openInMap(context: Context, locationUri: Uri) {
+        val intent = Intent()
+        intent.action = Intent.ACTION_VIEW
+        intent.data = locationUri
+        if (intent.resolveActivity(context.packageManager) != null) {
+            context.startActivity(intent)
+        }
     }
 
     private fun replaceFragment(activity: FragmentActivity, fragment: Fragment, addToBackStack: Boolean) {

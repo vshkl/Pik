@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="16dp"
+    android:paddingTop="16dp"
+    >
+
+    <ImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="72dp"
+        android:layout_height="32dp"
+        android:layout_gravity="start|center_vertical"
+        android:scaleType="fitCenter"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_calendar"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_vertical"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="72dp"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            tools:text="some_image_name.jpg"
+            />
+
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:textSize="16sp"
+            tools:text="2MP  2000 x 1000  1.2MB"
+            />
+
+    </LinearLayout>
+
+</FrameLayout>

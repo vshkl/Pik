@@ -38,7 +38,11 @@ class MainActivity : MvpAppCompatActivity(),
     override fun showImagePager(images: List<Image>?, startPosition: Int)
             = Navigation.navigateToImagePager(this, images, startPosition)
 
+    override fun showImageInfo(imagePath: String?) = Navigation.showImageInfoDialog(this, imagePath)
+
     override fun shareImages(imagePaths: List<String>?) = Navigation.shareImages(this, imagePaths)
+
+    override fun openMap(locationUri: Uri) = Navigation.openInMap(this, locationUri)
 
     //---[ Other ]------------------------------------------------------------------------------------------------------
 

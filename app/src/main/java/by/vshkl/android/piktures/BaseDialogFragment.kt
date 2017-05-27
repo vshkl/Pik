@@ -2,10 +2,10 @@ package by.vshkl.android.piktures
 
 import android.content.Context
 import by.vshkl.android.piktures.ui.main.MainActivity
-import com.arellomobile.mvp.MvpAppCompatFragment
+import com.arellomobile.mvp.MvpAppCompatDialogFragment
 import java.lang.ref.WeakReference
 
-open class BaseFragment : MvpAppCompatFragment() {
+open class BaseDialogFragment : MvpAppCompatDialogFragment() {
 
     private var parentActivityRef: WeakReference<MainActivity>? = null
 

@@ -1,5 +1,6 @@
 package by.vshkl.android.piktures.ui.main
 
+import android.net.Uri
 import by.vshkl.android.piktures.BasePresenter
 import by.vshkl.android.piktures.model.Album
 import by.vshkl.android.piktures.model.Image
@@ -24,7 +25,15 @@ class MainPresenter : BasePresenter<MainView>() {
         viewState.showImagePager(images, startPosition)
     }
 
+    fun showImageInfo(imagePath: String?) {
+        viewState.showImageInfo(imagePath)
+    }
+
     fun shareImages(imagePaths: List<String>?) {
         viewState.shareImages(imagePaths)
+    }
+
+    fun openMap(locationUri: Uri) {
+        viewState.openMap(locationUri)
     }
 }
