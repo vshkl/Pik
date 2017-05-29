@@ -3,6 +3,7 @@ package by.vshkl.android.piktures.ui.albums
 import android.content.Context
 import by.vshkl.android.piktures.BasePresenter
 import by.vshkl.android.piktures.local.Repository
+import by.vshkl.android.piktures.model.Album
 import by.vshkl.android.piktures.util.RxUtils
 import com.arellomobile.mvp.InjectViewState
 import java.lang.ref.WeakReference
@@ -19,11 +20,11 @@ class AlbumsPresenter : BasePresenter<AlbumsView>() {
                 }))
     }
 
-    fun deleteAlbums(context: Context, albumIds: List<String>?, deletedIndexes: Array<Int>?) {
-        setDisposable(Repository.deleteAlbum(WeakReference(context), albumIds)
+    fun deleteAlbums(context: Context, albums: List<Album>?, deletedIndexes: Array<Int>?) {
+        setDisposable(Repository.deleteAlbum(WeakReference(context), albums)
                 .compose(RxUtils.applySchedulers())
                 .subscribe({
-                    if (it == albumIds?.size) {
+                    if (it == albums?.size) {
                         viewState.albumsDeleted(deletedIndexes)
                     }
                 }))

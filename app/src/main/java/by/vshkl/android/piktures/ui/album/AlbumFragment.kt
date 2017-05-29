@@ -39,7 +39,7 @@ class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListene
         getParentActivity()?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setHasOptionsMenu(true)
         initRecyclerView(savedInstanceState)
-        albumPresenter.getAlbum(context, album?.id)
+        albumPresenter.getAlbum(context, album)
     }
 
     override fun onResume() {

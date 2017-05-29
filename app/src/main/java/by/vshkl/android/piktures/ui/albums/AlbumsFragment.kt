@@ -98,7 +98,7 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, SelectionList
                 return true
             }
             R.id.action_delete -> {
-                albumsPresenter.deleteAlbums(context, albumsAdapter?.getSelectedAlbumIds(),
+                albumsPresenter.deleteAlbums(context, albumsAdapter?.getSelectedAlbums(),
                         albumsAdapter?.selectedIndices)
                 finishActionMode()
                 return true
@@ -127,7 +127,7 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, SelectionList
     }
 
     override fun albumsDeleted(deletedIndexes: Array<Int>?) {
-        albumsAdapter?.deleteAlbues(deletedIndexes ?: emptyArray())
+        albumsAdapter?.deleteAlbums(deletedIndexes ?: emptyArray())
         albumsAdapter?.notifyDataSetChanged()
     }
 

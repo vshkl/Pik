@@ -3,6 +3,7 @@ package by.vshkl.android.piktures.ui.album
 import android.content.Context
 import by.vshkl.android.piktures.BasePresenter
 import by.vshkl.android.piktures.local.Repository
+import by.vshkl.android.piktures.model.Album
 import by.vshkl.android.piktures.util.RxUtils
 import com.arellomobile.mvp.InjectViewState
 import java.lang.ref.WeakReference
@@ -10,8 +11,8 @@ import java.lang.ref.WeakReference
 @InjectViewState
 class AlbumPresenter : BasePresenter<AlbumView>() {
 
-    fun getAlbum(context: Context, albumId: String?) {
-        setDisposable(Repository.getImages(WeakReference(context), albumId!!)
+    fun getAlbum(context: Context, album: Album?) {
+        setDisposable(Repository.getImages(WeakReference(context), album)
                 .compose(RxUtils.applySchedulers())
                 .subscribe({
                     viewState.hideLoading()

@@ -7,6 +7,7 @@ import android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 import android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI
 import by.vshkl.android.piktures.model.Album
 import by.vshkl.android.piktures.model.Image
+import by.vshkl.android.piktures.util.StorageUtils
 import io.reactivex.Observable
 import java.io.File
 import java.lang.ref.WeakReference
@@ -32,30 +33,35 @@ object Repository {
         emitter.onNext(albums)
     })
 
-    fun getImages(contextRef: WeakReference<Context>, albumId: String): Observable<MutableList<Image>>
+    fun getImages(contextRef: WeakReference<Context>, album: Album?): Observable<MutableList<Image>>
             = Observable.create({ emitter ->
-        val images = getImages(contextRef.get(), INTERNAL_CONTENT_URI, projectionAlbum, albumId, sortOrderDateDesc)
-        images.addAll(getImages(contextRef.get(), EXTERNAL_CONTENT_URI, projectionAlbum, albumId, sortOrderDateDesc))
-        contextRef.clear()
-        emitter.onNext(images)
+        when (album) {
+            null -> emitter.onNext(emptyList())
+            else -> {
+                val images = getImages(contextRef.get(), album.storageUri, projectionAlbum, album.id, sortOrderDateDesc)
+                contextRef.clear()
+                emitter.onNext(images)
+            }
+        }
     })
 
     fun deleteImages(contextRef: WeakReference<Context>, imagePaths: List<String>?): Observable<Int?>
             = Observable.create({ emitter ->
+        val storageUri = StorageUtils.getStorageUriByPath(imagePaths?.get(0))
         val deletedImagePaths = deleteImagesFromDisk(imagePaths)
         var deletedRows = 0
         deletedImagePaths?.forEach {
-            deletedRows += deleteImagesFromMediaStore(contextRef.get(), EXTERNAL_CONTENT_URI, projectionImageDelete, it) ?: 0
+            deletedRows += deleteImagesFromMediaStore(contextRef.get(), storageUri, projectionImageDelete, it) ?: 0
         }
         contextRef.clear()
         emitter.onNext(deletedRows)
     })
 
-    fun deleteAlbum(contextRef: WeakReference<Context>, albumIds: List<String>?): Observable<Int?>
+    fun deleteAlbum(contextRef: WeakReference<Context>, albums: List<Album>?): Observable<Int?>
             = Observable.create({ emitter ->
         var deletedRows = 0
-        albumIds?.forEach {
-            deletedRows += deleteAlbumFromDisk(contextRef.get(), EXTERNAL_CONTENT_URI, projectionAlbumThumbnail, it)
+        albums?.forEach {
+            deletedRows += deleteAlbumFromDisk(contextRef.get(), it.storageUri, projectionAlbumThumbnail, it.id)
         }
         contextRef.clear()
         emitter.onNext(deletedRows)
@@ -75,6 +81,7 @@ object Repository {
         while (cursor.moveToNext()) {
             val album = Album(
                     cursor.getString(cursor.getColumnIndex(BUCKET_ID)),
+                    storageUri,
                     cursor.getString(cursor.getColumnIndex(BUCKET_DISPLAY_NAME))
             )
             if (!albums.contains(album)) {
