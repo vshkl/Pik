@@ -11,5 +11,5 @@ interface AlbumView : MvpView {
 
     fun showAlbum(images: MutableList<Image>)
 
-    fun shareImages(imagePaths: Array<String>)
+    fun imagesDeleted(deletedIndexes: Array<Int>?)
 }

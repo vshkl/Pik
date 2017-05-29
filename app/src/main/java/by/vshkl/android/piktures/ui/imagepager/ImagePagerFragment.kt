@@ -46,7 +46,7 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-            getParentActivity()?.mainPresenter?.showImagePager(imagePagerAdapter?.images, currentPosition, true)
+            restartImageViewPager(imagePagerAdapter?.images, currentPosition, true)
         }
     }
 
@@ -88,7 +88,8 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
             }
             ivActionInfo -> getParentActivity()?.mainPresenter
                     ?.showImageInfo(imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
-            ivActionDelete -> println("Delete")
+            ivActionDelete -> imagePagerPresenter
+                    .deleteImage(context, imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0), vpPager.currentItem)
         }
     }
 
@@ -97,6 +98,11 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
     }
 
     //---[ View implementation ]----------------------------------------------------------------------------------------
+
+    override fun imageDeleted(deletedPosition: Int) {
+        restartImageViewPager(imagePagerAdapter?.images?.toMutableList()?.apply { removeAt(deletedPosition) },
+                deletedPosition, true)
+    }
 
     //---[ Other ]------------------------------------------------------------------------------------------------------
 
@@ -117,5 +123,9 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
     private fun setupViewPager() {
         vpPager.adapter = imagePagerAdapter
         vpPager.currentItem = currentPosition
+    }
+
+    private fun restartImageViewPager(images: List<Image>?, startPosition: Int, shouldReplace: Boolean) {
+        getParentActivity()?.mainPresenter?.showImagePager(images, startPosition, shouldReplace)
     }
 }
