@@ -8,7 +8,6 @@ import android.support.v7.view.ActionMode
 import android.support.v7.view.ActionMode.Callback
 import android.support.v7.widget.GridLayoutManager
 import android.view.*
-import android.widget.Toast
 import by.vshkl.android.piktures.BaseFragment
 import by.vshkl.android.piktures.R
 import by.vshkl.android.piktures.model.Album
@@ -124,7 +123,8 @@ class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListene
                 return true
             }
             R.id.action_delete -> {
-                Toast.makeText(context, "Delete", Toast.LENGTH_SHORT).show()
+                albumPresenter.deleteImage(context, albumAdapter?.getSelectedImagePaths(), albumAdapter?.selectedIndices)
+                finishActionMode()
                 return true
             }
         }
@@ -149,8 +149,9 @@ class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListene
         albumAdapter?.setImages(images)
     }
 
-    override fun shareImages(imagePaths: Array<String>) {
-
+    override fun imagesDeleted(deletedIndexes: Array<Int>?) {
+        albumAdapter?.deleteImages(deletedIndexes ?: emptyArray())
+        albumAdapter?.notifyDataSetChanged()
     }
 
     //---[ Other ]------------------------------------------------------------------------------------------------------

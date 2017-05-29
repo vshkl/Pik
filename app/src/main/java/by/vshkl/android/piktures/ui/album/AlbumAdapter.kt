@@ -67,4 +67,8 @@ class AlbumAdapter(private val itemSize: Int) : DragSelectRecyclerViewAdapter<Al
     fun getSelectedImagePaths(): List<String>? = images
             ?.filter { selectedIndices.contains(images?.indexOf(it)) }
             ?.map { it.image }
+
+    fun deleteImages(deletedIndexes: Array<Int>) {
+        images = images?.filterIndexed { index, _ -> !deletedIndexes.contains(index) }?.toMutableList()
+    }
 }

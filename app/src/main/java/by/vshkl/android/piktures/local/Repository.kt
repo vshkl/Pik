@@ -43,7 +43,11 @@ object Repository {
     fun deleteImages(contextRef: WeakReference<Context>, imagePaths: List<String>?): Observable<Int?>
             = Observable.create({ emitter ->
         val deletedImagePaths = deleteImagesFromDisk(imagePaths)
-        val deletedRows = deleteImagesFromMediaStore(contextRef.get(), EXTERNAL_CONTENT_URI, projectionImageDelete, deletedImagePaths)
+        var deletedRows = 0
+        deletedImagePaths?.forEach {
+            deletedRows += deleteImagesFromMediaStore(contextRef.get(), EXTERNAL_CONTENT_URI, projectionImageDelete, it) ?: 0
+        }
+        contextRef.clear()
         emitter.onNext(deletedRows)
     })
 
@@ -131,7 +135,8 @@ object Repository {
     }
 
     private fun deleteImagesFromMediaStore(context: Context?, storageUri: Uri, projection: String,
-                                           imagePaths: List<String>?): Int? {
-        return context?.contentResolver?.delete(storageUri, projection, imagePaths?.toTypedArray())
+                                           imagePath: String?): Int? {
+//        imagePaths?.forEach { context?.contentResolver?.delete(storageUri, projection, arrayOf(it)) }
+        return context?.contentResolver?.delete(storageUri, projection, arrayOf(imagePath))
     }
 }
