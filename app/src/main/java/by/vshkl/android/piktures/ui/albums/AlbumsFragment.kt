@@ -8,15 +8,15 @@ import android.support.v7.view.ActionMode
 import android.support.v7.view.ActionMode.Callback
 import android.support.v7.widget.GridLayoutManager
 import android.view.*
-import android.widget.Toast
 import by.vshkl.android.piktures.BaseFragment
 import by.vshkl.android.piktures.R
 import by.vshkl.android.piktures.model.Album
+import by.vshkl.android.piktures.util.DialogUtils
 import com.afollestad.dragselectrecyclerview.DragSelectRecyclerViewAdapter.SelectionListener
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_gallery.*
 
-class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, SelectionListener, Callback {
+class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, AlbumsRenameListener, SelectionListener, Callback {
 
     @InjectPresenter lateinit var albumsPresenter: AlbumsPresenter
     private var albumsAdapter: AlbumsAdapter? = null
@@ -69,6 +69,10 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, SelectionList
         rvGallery.setDragSelectActive(true, index)
     }
 
+    override fun onAlbumRenamed(album: Album?, newName: String?) {
+
+    }
+
     override fun onDragSelectionChanged(count: Int) {
         when {
             count != 0 -> {
@@ -94,7 +98,8 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, SelectionList
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_rename -> {
-                Toast.makeText(context, "Rename", Toast.LENGTH_SHORT).show()
+                albumsPresenter.showRenameDialog(albumsAdapter?.getSelectedAlbums()?.get(0))
+                finishActionMode()
                 return true
             }
             R.id.action_delete -> {
@@ -106,6 +111,7 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, SelectionList
         }
         return false
     }
+
 
     override fun onDestroyActionMode(mode: ActionMode?) = finishActionMode()
 
@@ -124,6 +130,10 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, SelectionList
     override fun showAlbums(albums: MutableList<Album>) {
         albumsAdapter?.setAlbums(albums)
         albumsAdapter?.notifyDataSetChanged()
+    }
+
+    override fun showRenameDialog(album: Album?) {
+        DialogUtils.showAlbumRenameDialog(context, album, this)
     }
 
     override fun albumsDeleted(deletedIndexes: Array<Int>?) {

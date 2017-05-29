@@ -11,5 +11,7 @@ interface AlbumsView : MvpView {
 
     fun showAlbums(albums: MutableList<Album>)
 
+    fun showRenameDialog(album: Album?)
+
     fun albumsDeleted(deletedIndexes: Array<Int>?)
 }

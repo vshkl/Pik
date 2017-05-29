@@ -57,7 +57,7 @@ object Repository {
         emitter.onNext(deletedRows)
     })
 
-    fun deleteAlbum(contextRef: WeakReference<Context>, albums: List<Album>?): Observable<Int?>
+    fun deleteAlbums(contextRef: WeakReference<Context>, albums: List<Album>?): Observable<Int?>
             = Observable.create({ emitter ->
         var deletedRows = 0
         albums?.forEach {

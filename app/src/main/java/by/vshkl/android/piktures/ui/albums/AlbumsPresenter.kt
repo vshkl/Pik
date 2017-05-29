@@ -11,6 +11,10 @@ import java.lang.ref.WeakReference
 @InjectViewState
 class AlbumsPresenter : BasePresenter<AlbumsView>() {
 
+    fun showRenameDialog(album: Album?) {
+        viewState.showRenameDialog(album)
+    }
+
     fun getAlbums(context: Context) {
         setDisposable(Repository.getAlbums(WeakReference(context))
                 .compose(RxUtils.applySchedulers())
@@ -21,7 +25,7 @@ class AlbumsPresenter : BasePresenter<AlbumsView>() {
     }
 
     fun deleteAlbums(context: Context, albums: List<Album>?, deletedIndexes: Array<Int>?) {
-        setDisposable(Repository.deleteAlbum(WeakReference(context), albums)
+        setDisposable(Repository.deleteAlbums(WeakReference(context), albums)
                 .compose(RxUtils.applySchedulers())
                 .subscribe({
                     if (it == albums?.size) {
