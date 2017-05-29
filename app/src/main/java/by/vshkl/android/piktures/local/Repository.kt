@@ -8,6 +8,7 @@ import android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI
 import by.vshkl.android.piktures.model.Album
 import by.vshkl.android.piktures.model.Image
 import io.reactivex.Observable
+import java.io.File
 import java.lang.ref.WeakReference
 import java.util.Collections.emptyList
 
@@ -17,6 +18,7 @@ object Repository {
     private val projectionAlbumThumbnail = arrayOf(BUCKET_ID, DATA)
     private val projectionAlbumCount = arrayOf(BUCKET_ID)
     private val projectionAlbums = arrayOf(BUCKET_ID, BUCKET_DISPLAY_NAME)
+    private val projectionImageDelete = DATA + " = ?"
 
     private val selectByBucketId = BUCKET_ID + " = ?"
 
@@ -36,6 +38,13 @@ object Repository {
         images.addAll(getImages(contextRef.get(), EXTERNAL_CONTENT_URI, projectionAlbum, albumId, sortOrderDateDesc))
         contextRef.clear()
         emitter.onNext(images)
+    })
+
+    fun deleteImages(contextRef: WeakReference<Context>, imagePaths: List<String>?): Observable<Int?>
+            = Observable.create({ emitter ->
+        val deletedImagePaths = deleteImagesFromDisk(imagePaths)
+        val deletedRows = deleteImagesFromMediaStore(contextRef.get(), EXTERNAL_CONTENT_URI, projectionImageDelete, deletedImagePaths)
+        emitter.onNext(deletedRows)
     })
 
     //------------------------------------------------------------------------------------------------------------------
@@ -97,7 +106,7 @@ object Repository {
         while (cursor.moveToNext()) {
             val image: Image = Image(
                     cursor.getLong(cursor.getColumnIndex(_ID)),
-                    cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)),
+                    cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)) ?: "",
                     cursor.getString(cursor.getColumnIndex(DATA)),
                     cursor.getString(cursor.getColumnIndex(MIME_TYPE))
             )
@@ -106,5 +115,23 @@ object Repository {
 
         cursor.close()
         return images
+    }
+
+    private fun deleteImagesFromDisk(imagePaths: List<String>?): List<String>? {
+        val deletedImagePaths: MutableList<String> = mutableListOf()
+        imagePaths?.forEach {
+            val file = File(it)
+            if (file.exists()) {
+                if (file.delete()) {
+                    deletedImagePaths.add(it)
+                }
+            }
+        }
+        return deletedImagePaths
+    }
+
+    private fun deleteImagesFromMediaStore(context: Context?, storageUri: Uri, projection: String,
+                                           imagePaths: List<String>?): Int? {
+        return context?.contentResolver?.delete(storageUri, projection, imagePaths?.toTypedArray())
     }
 }
