@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import by.vshkl.android.piktures.model.Image
 import com.github.piasy.biv.view.BigImageView
 
-class ImagePagerAdapter(private var images: List<Image>?) : PagerAdapter() {
+class ImagePagerAdapter(var images: List<Image>?) : PagerAdapter() {
 
     var imagePagerListener: ImagePagerListener? = null
 

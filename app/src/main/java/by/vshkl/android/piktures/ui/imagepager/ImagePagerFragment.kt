@@ -1,5 +1,7 @@
 package by.vshkl.android.piktures.ui.imagepager
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -11,17 +13,18 @@ import by.vshkl.android.piktures.BaseFragment
 import by.vshkl.android.piktures.R
 import by.vshkl.android.piktures.model.Image
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.fragment_image_pager.*
 
 class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, ImagePagerListener {
 
     @InjectPresenter lateinit var imagePagerPresenter: ImagePagerPresenter
-    private var startPosition: Int = 0
+    private var currentPosition: Int = 0
     private var imagePagerAdapter: ImagePagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startPosition = arguments.getInt(KEY_START_POSITION, 0)
+        currentPosition = arguments.getInt(KEY_START_POSITION, 0)
         imagePagerAdapter = ImagePagerAdapter(arguments.getParcelableArrayList(KEY_IMAGE_LIST))
     }
 
@@ -41,6 +44,12 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
         setupViewPager()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            getParentActivity()?.mainPresenter?.showImagePager(imagePagerAdapter?.images, currentPosition, true)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         imagePagerAdapter?.imagePagerListener = this
@@ -56,6 +65,8 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
         super.onDetach()
     }
 
+    //---[ Listeners ]--------------------------------------------------------------------------------------------------
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             android.R.id.home -> {
@@ -66,13 +77,15 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
         }
     }
 
-    //---[ Listeners ]--------------------------------------------------------------------------------------------------
-
     override fun onClick(v: View?) {
         when (v) {
             ivActionShare -> getParentActivity()?.mainPresenter
                     ?.shareImages(imagePagerAdapter?.getImagePath(vpPager.currentItem))
-            ivActionEdit -> println("Edit")
+            ivActionEdit -> {
+                currentPosition = vpPager.currentItem
+                getParentActivity()?.mainPresenter
+                        ?.editImage(this, UCrop.REQUEST_CROP, imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
+            }
             ivActionInfo -> getParentActivity()?.mainPresenter
                     ?.showImageInfo(imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
             ivActionDelete -> println("Delete")
@@ -103,6 +116,6 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
 
     private fun setupViewPager() {
         vpPager.adapter = imagePagerAdapter
-        vpPager.currentItem = startPosition
+        vpPager.currentItem = currentPosition
     }
 }

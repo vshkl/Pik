@@ -1,6 +1,7 @@
 package by.vshkl.android.piktures.ui.main
 
 import android.net.Uri
+import android.support.v4.app.Fragment
 import by.vshkl.android.piktures.BasePresenter
 import by.vshkl.android.piktures.model.Album
 import by.vshkl.android.piktures.model.Image
@@ -21,8 +22,8 @@ class MainPresenter : BasePresenter<MainView>() {
         viewState.showAlbum(album)
     }
 
-    fun showImagePager(images: List<Image>?, startPosition: Int) {
-        viewState.showImagePager(images, startPosition)
+    fun showImagePager(images: List<Image>?, startPosition: Int, shouldReplace: Boolean) {
+        viewState.showImagePager(images, startPosition, shouldReplace)
     }
 
     fun showImageInfo(imagePath: String?) {
@@ -31,6 +32,10 @@ class MainPresenter : BasePresenter<MainView>() {
 
     fun shareImages(imagePaths: List<String>?) {
         viewState.shareImages(imagePaths)
+    }
+
+    fun editImage(fragment: Fragment, requestCode: Int, imagePath: String?) {
+        viewState.editImage(fragment, requestCode, imagePath)
     }
 
     fun openMap(locationUri: Uri) {
