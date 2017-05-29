@@ -37,11 +37,21 @@ object Navigation {
     }
 
     fun shareImages(context: Context, imagePaths: List<String>?) {
-        val intent = Intent(Intent.ACTION_SEND_MULTIPLE)
+        val intent = Intent()
         intent.type = "image/*"
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM,
-                ArrayList(imagePaths?.map { FileProvider.getUriForFile(context, AUTHORITY, File(it)) }))
+        when (imagePaths?.size) {
+            1 -> {
+                intent.action = Intent.ACTION_SEND
+                intent.putExtra(Intent.EXTRA_STREAM,
+                        FileProvider.getUriForFile(context, AUTHORITY, File(imagePaths[0])))
+            }
+            else -> {
+                intent.action = Intent.ACTION_SEND_MULTIPLE
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM,
+                        ArrayList(imagePaths?.map { FileProvider.getUriForFile(context, AUTHORITY, File(it)) }))
+            }
+        }
         context.startActivity(Intent.createChooser(intent, context.getString(R.string.all_action_share_title)))
     }
 
