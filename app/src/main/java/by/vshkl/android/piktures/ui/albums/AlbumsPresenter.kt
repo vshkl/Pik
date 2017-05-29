@@ -18,4 +18,14 @@ class AlbumsPresenter : BasePresenter<AlbumsView>() {
                     viewState.showAlbums(it)
                 }))
     }
+
+    fun deleteAlbums(context: Context, albumIds: List<String>?, deletedIndexes: Array<Int>?) {
+        setDisposable(Repository.deleteAlbum(WeakReference(context), albumIds)
+                .compose(RxUtils.applySchedulers())
+                .subscribe({
+                    if (it == albumIds?.size) {
+                        viewState.albumsDeleted(deletedIndexes)
+                    }
+                }))
+    }
 }

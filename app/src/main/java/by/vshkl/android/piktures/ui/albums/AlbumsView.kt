@@ -10,4 +10,6 @@ interface AlbumsView : MvpView {
     fun hideLoading()
 
     fun showAlbums(albums: MutableList<Album>)
+
+    fun albumsDeleted(deletedIndexes: Array<Int>?)
 }
