@@ -22,8 +22,8 @@ class MainPresenter : BasePresenter<MainView>() {
         viewState.showAlbum(album)
     }
 
-    fun showImagePager(images: List<Image>?, startPosition: Int) {
-        viewState.showImagePager(images, startPosition)
+    fun showImagePager(images: List<Image>?, startPosition: Int, shouldReplace: Boolean) {
+        viewState.showImagePager(images, startPosition, shouldReplace)
     }
 
     fun showImageInfo(imagePath: String?) {

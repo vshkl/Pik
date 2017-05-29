@@ -14,7 +14,7 @@ interface MainView : MvpView {
 
     fun showAlbum(album: Album?)
 
-    fun showImagePager(images: List<Image>?, startPosition: Int)
+    fun showImagePager(images: List<Image>?, startPosition: Int, shouldReplace: Boolean)
 
     fun showImageInfo(imagePath: String?)
 

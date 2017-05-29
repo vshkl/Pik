@@ -78,7 +78,7 @@ class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListene
     //---[ Listeners ]--------------------------------------------------------------------------------------------------
 
     override fun onImageClicked(images: List<Image>?, startPosition: Int) {
-        getParentActivity()?.mainPresenter?.showImagePager(images, startPosition)
+        getParentActivity()?.mainPresenter?.showImagePager(images, startPosition, false)
     }
 
     override fun onImageSelectionClicked(index: Int) {

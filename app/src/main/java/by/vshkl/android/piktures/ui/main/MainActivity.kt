@@ -36,8 +36,8 @@ class MainActivity : MvpAppCompatActivity(),
 
     override fun showAlbum(album: Album?) = Navigation.navigateToAlbum(this, album)
 
-    override fun showImagePager(images: List<Image>?, startPosition: Int)
-            = Navigation.navigateToImagePager(this, images, startPosition)
+    override fun showImagePager(images: List<Image>?, startPosition: Int, shouldReplace: Boolean)
+            = Navigation.navigateToImagePager(this, images, startPosition, shouldReplace)
 
     override fun showImageInfo(imagePath: String?) = Navigation.showImageInfoDialog(this, imagePath)
 

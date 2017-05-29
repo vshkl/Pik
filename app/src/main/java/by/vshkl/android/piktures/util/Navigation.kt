@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
+import android.support.v4.app.FragmentManager
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import by.vshkl.android.piktures.R
 import by.vshkl.android.piktures.model.Album
@@ -15,8 +17,6 @@ import by.vshkl.android.piktures.ui.imageinfo.ImageInfoFragment
 import by.vshkl.android.piktures.ui.imagepager.ImagePagerFragment
 import com.yalantis.ucrop.UCrop
 import java.io.File
-import android.support.v4.content.ContextCompat
-
 
 
 object Navigation {
@@ -24,15 +24,16 @@ object Navigation {
     private val AUTHORITY: String = "by.vshkl.android.piktures.provider"
 
     fun navigateToAlbums(activity: FragmentActivity) {
-        replaceFragment(activity, AlbumsFragment.newInstance(), false)
+        replaceFragment(activity, AlbumsFragment.newInstance(), false, false)
     }
 
     fun navigateToAlbum(activity: FragmentActivity, album: Album?) {
-        replaceFragment(activity, AlbumFragment.newInstance(album), true)
+        replaceFragment(activity, AlbumFragment.newInstance(album), true, false)
     }
 
-    fun navigateToImagePager(activity: FragmentActivity, images: List<Image>?, startPosition: Int) {
-        replaceFragment(activity, ImagePagerFragment.newInstance(ArrayList(images), startPosition), true)
+    fun navigateToImagePager(activity: FragmentActivity, images: List<Image>?, startPosition: Int,
+                             shouldReplace: Boolean) {
+        replaceFragment(activity, ImagePagerFragment.newInstance(ArrayList(images), startPosition), true, shouldReplace)
     }
 
     fun showImageInfoDialog(activity: FragmentActivity, imagePath: String?) {
@@ -79,9 +80,13 @@ object Navigation {
         }
     }
 
-    private fun replaceFragment(activity: FragmentActivity, fragment: Fragment, addToBackStack: Boolean) {
+    private fun replaceFragment(activity: FragmentActivity, fragment: Fragment, addToBackStack: Boolean,
+                                shouldReplace: Boolean) {
         val fragmentManager = activity.supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
+        if (shouldReplace) {
+            fragmentManager.popBackStack()
+        }
         fragmentTransaction.replace(R.id.flFragmentContainer, fragment, fragment.tag)
         when {
             addToBackStack -> fragmentTransaction.addToBackStack(fragment.tag)
