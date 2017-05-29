@@ -51,6 +51,16 @@ object Repository {
         emitter.onNext(deletedRows)
     })
 
+    fun deleteAlbum(contextRef: WeakReference<Context>, albumIds: List<String>?): Observable<Int?>
+            = Observable.create({ emitter ->
+        var deletedRows = 0
+        albumIds?.forEach {
+            deletedRows += deleteAlbumFromDisk(contextRef.get(), EXTERNAL_CONTENT_URI, projectionAlbumThumbnail, it)
+        }
+        contextRef.clear()
+        emitter.onNext(deletedRows)
+    })
+
     //------------------------------------------------------------------------------------------------------------------
 
     private fun getAlbums(context: Context, storageUri: Uri, projection: Array<String>, sortOrder: String)
@@ -125,7 +135,7 @@ object Repository {
         val deletedImagePaths: MutableList<String> = mutableListOf()
         imagePaths?.forEach {
             val file = File(it)
-            if (file.exists()) {
+            if (file.exists() && file.isFile) {
                 if (file.delete()) {
                     deletedImagePaths.add(it)
                 }
@@ -136,7 +146,37 @@ object Repository {
 
     private fun deleteImagesFromMediaStore(context: Context?, storageUri: Uri, projection: String,
                                            imagePath: String?): Int? {
-//        imagePaths?.forEach { context?.contentResolver?.delete(storageUri, projection, arrayOf(it)) }
         return context?.contentResolver?.delete(storageUri, projection, arrayOf(imagePath))
+    }
+
+    private fun deleteAlbumFromDisk(context: Context?, storageUri: Uri, projection: Array<String>?,
+                                    albumIds: String): Int {
+        val deletedAlbumPaths: MutableList<String> = mutableListOf()
+        val imagePathsToDelete: MutableList<String> = mutableListOf()
+        val albumFileToDelete: File
+
+        val cursor = context?.contentResolver?.query(storageUri, projection, selectByBucketId, arrayOf(albumIds), sortOrderDateDesc)
+
+        if (cursor == null) {
+            return 0
+        }
+        while (cursor.moveToNext()) {
+            val imagePath = cursor.getString(cursor.getColumnIndex(DATA))
+            if (!imagePathsToDelete.contains(imagePath)) {
+                imagePathsToDelete.add(imagePath)
+            }
+        }
+
+        cursor.close()
+
+        albumFileToDelete = File(imagePathsToDelete[0]).parentFile
+
+        deleteImagesFromDisk(imagePathsToDelete)?.forEach {
+            deleteImagesFromMediaStore(context, EXTERNAL_CONTENT_URI, projectionImageDelete, it)
+        }
+
+        albumFileToDelete.takeIf { it.listFiles().isEmpty() }?.delete()
+
+        return 1
     }
 }

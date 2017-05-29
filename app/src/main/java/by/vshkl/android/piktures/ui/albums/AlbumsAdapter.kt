@@ -72,4 +72,12 @@ class AlbumsAdapter(private val itemSize: Int) : DragSelectRecyclerViewAdapter<A
     fun setSelectionMode(isSelectionMode: Boolean) {
         this.isSelectingMode = isSelectionMode
     }
+
+    fun getSelectedAlbumIds(): List<String>? = albums
+            ?.filterIndexed { index, _ -> selectedIndices.contains(index) }
+            ?.map { it.id }
+
+    fun deleteAlbues(deletedIndexes: Array<Int>) {
+        albums = albums?.filterIndexed { index, _ -> !deletedIndexes.contains(index) }?.toMutableList()
+    }
 }
