@@ -6,6 +6,7 @@ import android.media.MediaScannerConnection.OnScanCompletedListener
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.support.v4.app.Fragment
 import by.vshkl.android.piktures.R
 import by.vshkl.android.piktures.model.Album
 import by.vshkl.android.piktures.model.Image
@@ -41,6 +42,10 @@ class MainActivity : MvpAppCompatActivity(),
     override fun showImageInfo(imagePath: String?) = Navigation.showImageInfoDialog(this, imagePath)
 
     override fun shareImages(imagePaths: List<String>?) = Navigation.shareImages(this, imagePaths)
+
+    override fun editImage(fragment: Fragment, requestCode: Int, imagePath: String?) {
+        Navigation.editImage(this, fragment, requestCode, imagePath)
+    }
 
     override fun openMap(locationUri: Uri) = Navigation.openInMap(this, locationUri)
 

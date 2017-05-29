@@ -60,4 +60,6 @@ dependencies {
     compile 'com.afollestad:drag-select-recyclerview:0.4.0'
 
     compile 'com.drewnoakes:metadata-extractor:2.10.1'
+
+    compile 'com.github.yalantis:ucrop:2.2.1-native'
 }

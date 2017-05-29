@@ -13,7 +13,11 @@ import by.vshkl.android.piktures.ui.album.AlbumFragment
 import by.vshkl.android.piktures.ui.albums.AlbumsFragment
 import by.vshkl.android.piktures.ui.imageinfo.ImageInfoFragment
 import by.vshkl.android.piktures.ui.imagepager.ImagePagerFragment
+import com.yalantis.ucrop.UCrop
 import java.io.File
+import android.support.v4.content.ContextCompat
+
+
 
 object Navigation {
 
@@ -53,6 +57,17 @@ object Navigation {
             }
         }
         context.startActivity(Intent.createChooser(intent, context.getString(R.string.all_action_share_title)))
+    }
+
+    fun editImage(context: Context, fragment: Fragment, requestCode: Int, imagePath: String?) {
+        val options = UCrop.Options()
+        options.setStatusBarColor(ContextCompat.getColor(context, android.R.color.black))
+        options.setToolbarColor(ContextCompat.getColor(context, android.R.color.black))
+        options.setActiveWidgetColor(ContextCompat.getColor(context, R.color.colorAccent))
+        options.setCompressionQuality(100)
+        UCrop.of(Uri.fromFile(File(imagePath)), Uri.fromFile(File(imagePath)))
+                .withOptions(options)
+                .start(context, fragment, requestCode)
     }
 
     fun openInMap(context: Context, locationUri: Uri) {

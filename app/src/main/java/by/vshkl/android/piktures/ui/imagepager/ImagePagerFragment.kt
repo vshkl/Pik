@@ -90,6 +90,7 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
     companion object {
         private val KEY_IMAGE_LIST = "ImagePagerFragment.KEY_IMAGE_LIST"
         private val KEY_START_POSITION = "ImagePagerFragment.KEY_START_POSITION"
+        private val REQUEST_CROP = 42
 
         fun newInstance(images: ArrayList<Image>?, startPosition: Int): Fragment {
             val args: Bundle = Bundle()
