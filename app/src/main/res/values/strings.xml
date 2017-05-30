@@ -13,6 +13,12 @@
 
     <string name="all_action_share_title">Share to…</string>
 
+    <string name="all_dialog_cancel">@android:string/cancel</string>
+
+    <string name="albums_dialog_rename_title">Rename album</string>
+    <string name="albums_dialog_rename_hint">Album name</string>
+    <string name="albums_dialog_rename_ok">Rename</string>
+
     <string name="image_info_title">Info</string>
     <string name="image_info_details">Details</string>
 
