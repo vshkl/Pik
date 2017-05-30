@@ -7,7 +7,7 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/colorPrimary</item>
         <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowBackground">@color/colorPrimaryLight</item>
+        <item name="android:windowBackground">@color/colorAlbumBackground</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -21,13 +21,13 @@
     </style>
 
     <style name="AppTheme.AppToolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/primary_text_dark</item>
+        <item name="android:textColorSecondary">@android:color/secondary_text_dark</item>
     </style>
 
     <style name="AppTheme.AppToolbar.Dark" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:textColorPrimary">@android:color/black</item>
-        <item name="android:textColorSecondary">@android:color/black</item>
+        <item name="android:textColorPrimary">@android:color/primary_text_light</item>
+        <item name="android:textColorSecondary">@android:color/secondary_text_light</item>
     </style>
 
 </resources>
