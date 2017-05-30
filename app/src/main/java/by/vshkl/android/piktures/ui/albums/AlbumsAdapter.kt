@@ -80,7 +80,13 @@ class AlbumsAdapter(private val itemSize: Int) : DragSelectRecyclerViewAdapter<A
         albums = albums?.filterIndexed { index, _ -> !deletedIndexes.contains(index) }?.toMutableList()
     }
 
-    fun renameAlbum(newName: String, albumPosition: Int) {
-        albums?.forEachIndexed { index, album -> album.takeIf { index == albumPosition }?.name = newName }
+    fun renameAlbum(albumId: String, newName: String, albumPosition: Int) {
+        albums?.forEachIndexed { index, album ->
+            if (index == albumPosition) {
+                album.name = newName
+                album.thumbnail = album.thumbnail.replace(album.name, newName, false)
+                album.id = albumId
+            }
+        }
     }
 }

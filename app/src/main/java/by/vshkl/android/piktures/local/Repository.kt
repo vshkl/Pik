@@ -28,6 +28,7 @@ object Repository {
             BUCKET_ID, BUCKET_DISPLAY_NAME, WIDTH, HEIGHT)
 
     private val selectByBucketId = BUCKET_ID + " = ?"
+    private val selectByBucketDisplayName = BUCKET_DISPLAY_NAME + " = ?"
 
     private val sortOrderDateDesc = DATE_MODIFIED + " DESC"
     private val sortOrderDateDescOne = DATE_MODIFIED + " DESC LIMIT 1"
@@ -73,7 +74,7 @@ object Repository {
         emitter.onNext(deletedRows)
     })
 
-    fun renameAlbum(contextRef: WeakReference<Context>, album: Album?, newName: String): Observable<Int> =
+    fun renameAlbum(contextRef: WeakReference<Context>, album: Album?, newName: String): Observable<String> =
             Observable.create({ emitter ->
                 val renamedRows = renameAlbum(contextRef.get(), album?.storageUri!!, projectionAll, album,
                         newName)
@@ -201,14 +202,14 @@ object Repository {
     }
 
     private fun renameAlbum(context: Context?, storageUri: Uri, projection: Array<String>, album: Album?,
-                            newName: String): Int {
+                            newName: String): String {
         val cursor = context?.contentResolver?.query(storageUri, projection, selectByBucketId, arrayOf(album?.id),
                 sortOrderDateDesc)
 
         val rows: MutableList<Row> = emptyList<Row>().toMutableList()
 
         if (cursor == null) {
-            return 0
+            return album?.id!!
         }
         while (cursor.moveToNext()) {
             val row = Row(
@@ -237,14 +238,11 @@ object Repository {
         }
         cursor.close()
 
-        rows.forEach { println(it) }
-
         val albumFile = File(rows[0].data).parentFile
         albumFile.takeIf { it.isDirectory }?.renameTo(File(albumFile.parent + File.separator + newName))
 
         rows.forEach { deleteImagesFromMediaStore(context, storageUri, projectionImageDelete, it.data) }
 
-        var insertedRows = 0
         val contentValue = ContentValues()
         rows.forEach {
             contentValue.clear()
@@ -269,10 +267,17 @@ object Repository {
             contentValue.put(WIDTH, it.width)
             contentValue.put(HEIGHT, it.height)
             context.contentResolver.insert(storageUri, contentValue)
-                    .takeIf { it != null }
-                    ?.apply { insertedRows += 1 }
         }
 
-        return insertedRows
+        return getAlbumId(context, storageUri, newName)
+    }
+
+    private fun getAlbumId(context: Context, storageUri: Uri, albumName: String): String {
+        val cursor = context.contentResolver.query(storageUri, projectionAlbums, selectByBucketDisplayName,
+                arrayOf(albumName), sortOrderDateDescOne)
+        cursor.moveToFirst()
+        val albumId = cursor.getString(cursor.getColumnIndex(BUCKET_ID))
+        cursor.close()
+        return albumId
     }
 }

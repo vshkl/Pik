@@ -37,6 +37,8 @@ class AlbumsPresenter : BasePresenter<AlbumsView>() {
     fun renameAlbum(context: Context, album: Album?, newName: String, albumPosition: Int) {
         Repository.renameAlbum(WeakReference(context), album, newName)
                 .compose(RxUtils.applySchedulers())
-                .subscribe({ count -> viewState.takeIf { count > 0 }?.onAlbumRenamed(newName, albumPosition) })
+                .subscribe({ albumId ->
+                    viewState.takeIf { albumId != null }?.onAlbumRenamed(albumId, newName, albumPosition)
+                })
     }
 }

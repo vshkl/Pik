@@ -112,7 +112,6 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, AlbumsRenameL
         return false
     }
 
-
     override fun onDestroyActionMode(mode: ActionMode?) = finishActionMode()
 
     //---[ View implementation ]----------------------------------------------------------------------------------------
@@ -133,7 +132,9 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, AlbumsRenameL
     }
 
     override fun showRenameDialog(album: Album?) {
-        DialogUtils.showAlbumRenameDialog(context, album, this, albumsAdapter?.selectedIndices?.get(0)!!)
+        if (albumsAdapter?.selectedCount!! > 0) {
+            DialogUtils.showAlbumRenameDialog(context, album, this, albumsAdapter?.selectedIndices?.get(0)!!)
+        }
     }
 
     override fun onAlbumsDeleted(deletedIndexes: Array<Int>?) {
@@ -141,8 +142,8 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, AlbumsRenameL
         albumsAdapter?.notifyDataSetChanged()
     }
 
-    override fun onAlbumRenamed(newName: String, albumPosition: Int) {
-        albumsAdapter?.renameAlbum(newName, albumPosition)
+    override fun onAlbumRenamed(albumId: String, newName: String, albumPosition: Int) {
+        albumsAdapter?.renameAlbum(albumId, newName, albumPosition)
         albumsAdapter?.notifyDataSetChanged()
     }
 
