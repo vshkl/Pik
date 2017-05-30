@@ -69,8 +69,8 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, AlbumsRenameL
         rvGallery.setDragSelectActive(true, index)
     }
 
-    override fun onAlbumRenamed(album: Album?, newName: String?) {
-
+    override fun onAlbumRenamed(album: Album?, newName: String, albumPosition: Int) {
+        albumsPresenter.renameAlbum(context, album, newName, albumPosition)
     }
 
     override fun onDragSelectionChanged(count: Int) {
@@ -133,11 +133,16 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, AlbumsRenameL
     }
 
     override fun showRenameDialog(album: Album?) {
-        DialogUtils.showAlbumRenameDialog(context, album, this)
+        DialogUtils.showAlbumRenameDialog(context, album, this, albumsAdapter?.selectedIndices?.get(0)!!)
     }
 
-    override fun albumsDeleted(deletedIndexes: Array<Int>?) {
+    override fun onAlbumsDeleted(deletedIndexes: Array<Int>?) {
         albumsAdapter?.deleteAlbums(deletedIndexes ?: emptyArray())
+        albumsAdapter?.notifyDataSetChanged()
+    }
+
+    override fun onAlbumRenamed(newName: String, albumPosition: Int) {
+        albumsAdapter?.renameAlbum(newName, albumPosition)
         albumsAdapter?.notifyDataSetChanged()
     }
 

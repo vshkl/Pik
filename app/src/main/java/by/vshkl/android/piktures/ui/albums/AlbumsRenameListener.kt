@@ -4,5 +4,5 @@ import by.vshkl.android.piktures.model.Album
 
 interface AlbumsRenameListener {
 
-    fun onAlbumRenamed(album: Album?, newName: String?)
+    fun onAlbumRenamed(album: Album?, newName: String, albumPosition: Int)
 }

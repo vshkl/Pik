@@ -10,7 +10,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 
 object DialogUtils {
 
-    fun showAlbumRenameDialog(context: Context, album: Album?, listener: AlbumsRenameListener) {
+    fun showAlbumRenameDialog(context: Context, album: Album?, listener: AlbumsRenameListener, albumPosition: Int) {
         MaterialDialog.Builder(context)
                 .title(R.string.albums_dialog_rename_title)
                 .positiveText(R.string.albums_dialog_rename_ok)
@@ -18,7 +18,9 @@ object DialogUtils {
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .contentColor(ContextCompat.getColor(context, android.R.color.primary_text_light))
                 .input(context.getString(R.string.albums_dialog_rename_hint), album?.name, false, { _, _ -> })
-                .onPositive { dialog, _ -> listener.onAlbumRenamed(album, dialog.inputEditText?.text?.toString()) }
+                .onPositive { dialog, _ ->
+                    listener.onAlbumRenamed(album, dialog.inputEditText?.text?.toString()!!, albumPosition)
+                }
                 .show()
     }
 }

@@ -13,5 +13,7 @@ interface AlbumsView : MvpView {
 
     fun showRenameDialog(album: Album?)
 
-    fun albumsDeleted(deletedIndexes: Array<Int>?)
+    fun onAlbumsDeleted(deletedIndexes: Array<Int>?)
+
+    fun onAlbumRenamed(newName: String, albumPosition: Int)
 }

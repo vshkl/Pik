@@ -29,8 +29,14 @@ class AlbumsPresenter : BasePresenter<AlbumsView>() {
                 .compose(RxUtils.applySchedulers())
                 .subscribe({
                     if (it == albums?.size) {
-                        viewState.albumsDeleted(deletedIndexes)
+                        viewState.onAlbumsDeleted(deletedIndexes)
                     }
                 }))
+    }
+
+    fun renameAlbum(context: Context, album: Album?, newName: String, albumPosition: Int) {
+        Repository.renameAlbum(WeakReference(context), album, newName)
+                .compose(RxUtils.applySchedulers())
+                .subscribe({ count -> viewState.takeIf { count > 0 }?.onAlbumRenamed(newName, albumPosition) })
     }
 }

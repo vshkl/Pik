@@ -1,5 +1,6 @@
 package by.vshkl.android.piktures.local
 
+import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore.Images.ImageColumns.*
@@ -7,6 +8,7 @@ import android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 import android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI
 import by.vshkl.android.piktures.model.Album
 import by.vshkl.android.piktures.model.Image
+import by.vshkl.android.piktures.model.Row
 import by.vshkl.android.piktures.util.StorageUtils
 import io.reactivex.Observable
 import java.io.File
@@ -17,9 +19,13 @@ object Repository {
 
     private val projectionAlbum = arrayOf(_ID, DATA, DISPLAY_NAME, MIME_TYPE)
     private val projectionAlbumThumbnail = arrayOf(BUCKET_ID, DATA)
+    private val projectionAlbumRename = arrayOf(BUCKET_ID, DATA, BUCKET_DISPLAY_NAME)
     private val projectionAlbumCount = arrayOf(BUCKET_ID)
     private val projectionAlbums = arrayOf(BUCKET_ID, BUCKET_DISPLAY_NAME)
     private val projectionImageDelete = DATA + " = ?"
+    private val projectionAll = arrayOf(_ID, DATA, SIZE, DISPLAY_NAME, MIME_TYPE, TITLE, DATE_ADDED, DATE_MODIFIED,
+            DESCRIPTION, PICASA_ID, IS_PRIVATE, LATITUDE, LONGITUDE, DATE_TAKEN, ORIENTATION, MINI_THUMB_MAGIC,
+            BUCKET_ID, BUCKET_DISPLAY_NAME, WIDTH, HEIGHT)
 
     private val selectByBucketId = BUCKET_ID + " = ?"
 
@@ -66,6 +72,14 @@ object Repository {
         contextRef.clear()
         emitter.onNext(deletedRows)
     })
+
+    fun renameAlbum(contextRef: WeakReference<Context>, album: Album?, newName: String): Observable<Int> =
+            Observable.create({ emitter ->
+                val renamedRows = renameAlbum(contextRef.get(), album?.storageUri!!, projectionAll, album,
+                        newName)
+                contextRef.clear()
+                emitter.onNext(renamedRows)
+            })
 
     //------------------------------------------------------------------------------------------------------------------
 
@@ -158,7 +172,6 @@ object Repository {
 
     private fun deleteAlbumFromDisk(context: Context?, storageUri: Uri, projection: Array<String>?,
                                     albumIds: String): Int {
-        val deletedAlbumPaths: MutableList<String> = mutableListOf()
         val imagePathsToDelete: MutableList<String> = mutableListOf()
         val albumFileToDelete: File
 
@@ -179,11 +192,87 @@ object Repository {
         albumFileToDelete = File(imagePathsToDelete[0]).parentFile
 
         deleteImagesFromDisk(imagePathsToDelete)?.forEach {
-            deleteImagesFromMediaStore(context, EXTERNAL_CONTENT_URI, projectionImageDelete, it)
+            deleteImagesFromMediaStore(context, storageUri, projectionImageDelete, it)
         }
 
         albumFileToDelete.takeIf { it.listFiles().isEmpty() }?.delete()
 
         return 1
+    }
+
+    private fun renameAlbum(context: Context?, storageUri: Uri, projection: Array<String>, album: Album?,
+                            newName: String): Int {
+        val cursor = context?.contentResolver?.query(storageUri, projection, selectByBucketId, arrayOf(album?.id),
+                sortOrderDateDesc)
+
+        val rows: MutableList<Row> = emptyList<Row>().toMutableList()
+
+        if (cursor == null) {
+            return 0
+        }
+        while (cursor.moveToNext()) {
+            val row = Row(
+                    cursor.getInt(cursor.getColumnIndex(_ID)),
+                    cursor.getString(cursor.getColumnIndex(DATA)),
+                    cursor.getInt(cursor.getColumnIndex(SIZE)),
+                    cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)),
+                    cursor.getString(cursor.getColumnIndex(MIME_TYPE)),
+                    cursor.getString(cursor.getColumnIndex(TITLE)),
+                    cursor.getInt(cursor.getColumnIndex(DATE_ADDED)),
+                    cursor.getInt(cursor.getColumnIndex(DATE_MODIFIED)),
+                    cursor.getString(cursor.getColumnIndex(DESCRIPTION)),
+                    cursor.getString(cursor.getColumnIndex(PICASA_ID)),
+                    cursor.getInt(cursor.getColumnIndex(IS_PRIVATE)),
+                    cursor.getDouble(cursor.getColumnIndex(LATITUDE)),
+                    cursor.getDouble(cursor.getColumnIndex(LONGITUDE)),
+                    cursor.getInt(cursor.getColumnIndex(DATE_TAKEN)),
+                    cursor.getInt(cursor.getColumnIndex(ORIENTATION)),
+                    cursor.getInt(cursor.getColumnIndex(MINI_THUMB_MAGIC)),
+                    cursor.getString(cursor.getColumnIndex(BUCKET_ID)),
+                    cursor.getString(cursor.getColumnIndex(BUCKET_DISPLAY_NAME)),
+                    cursor.getInt(cursor.getColumnIndex(WIDTH)),
+                    cursor.getInt(cursor.getColumnIndex(HEIGHT))
+            )
+            rows.add(row)
+        }
+        cursor.close()
+
+        rows.forEach { println(it) }
+
+        val albumFile = File(rows[0].data).parentFile
+        albumFile.takeIf { it.isDirectory }?.renameTo(File(albumFile.parent + File.separator + newName))
+
+        rows.forEach { deleteImagesFromMediaStore(context, storageUri, projectionImageDelete, it.data) }
+
+        var insertedRows = 0
+        val contentValue = ContentValues()
+        rows.forEach {
+            contentValue.clear()
+            contentValue.put(_ID, it.id)
+            contentValue.put(DATA, it.data.replace(album?.name!!, newName, false))
+            contentValue.put(SIZE, it.size)
+            contentValue.put(DISPLAY_NAME, it.displayName)
+            contentValue.put(MIME_TYPE, it.mimeType)
+            contentValue.put(TITLE, it.title)
+            contentValue.put(DATE_ADDED, it.dateAdded)
+            contentValue.put(DATE_MODIFIED, it.dateModified)
+            contentValue.put(DESCRIPTION, it.description)
+            contentValue.put(PICASA_ID, it.picasaId)
+            contentValue.put(IS_PRIVATE, it.isPrivate)
+            contentValue.put(LATITUDE, it.latitude)
+            contentValue.put(LONGITUDE, it.longitude)
+            contentValue.put(DATE_TAKEN, it.dateTaken)
+            contentValue.put(ORIENTATION, it.orientation)
+            contentValue.put(MINI_THUMB_MAGIC, it.miniThumbnailMagic)
+            contentValue.put(BUCKET_ID, it.bucketId)
+            contentValue.put(BUCKET_DISPLAY_NAME, newName)
+            contentValue.put(WIDTH, it.width)
+            contentValue.put(HEIGHT, it.height)
+            context.contentResolver.insert(storageUri, contentValue)
+                    .takeIf { it != null }
+                    ?.apply { insertedRows += 1 }
+        }
+
+        return insertedRows
     }
 }
