@@ -93,7 +93,7 @@ class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListene
             count != 0 -> {
                 when (actionMode) {
                     null -> actionMode = getParentActivity()?.startSupportActionMode(this)
-                    else -> menu?.findItem(R.id.action_rename)?.isVisible = count == 1
+                    else -> menu?.findItem(R.id.action_info)?.isVisible = count == 1
                 }
                 actionMode?.title = getString(R.string.all_menu_selected,
                         albumAdapter?.selectedCount, albumAdapter?.itemCount)
