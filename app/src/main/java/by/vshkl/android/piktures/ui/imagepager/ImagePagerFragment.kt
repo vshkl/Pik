@@ -119,20 +119,20 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
         val animation = AlphaAnimation(0.0f, 1.0f)
         animation.duration = 500
         animation.fillAfter = true
-        tbToolbar.startAnimation(animation)
-        llActions.startAnimation(animation)
-        tbToolbar.visibility = View.VISIBLE
-        llActions.visibility = View.VISIBLE
+        arrayOf(tbToolbar, ivActionShare, ivActionEdit, ivActionInfo, ivActionDelete).forEach {
+            it.startAnimation(animation)
+            it.visibility = View.VISIBLE
+        }
     }
 
     override fun hideUi() {
         val animation = AlphaAnimation(1.0f, 0.0f)
         animation.duration = 500
         animation.fillAfter = true
-        tbToolbar.startAnimation(animation)
-        llActions.startAnimation(animation)
-        tbToolbar.visibility = View.GONE
-        llActions.visibility = View.GONE
+        arrayOf(tbToolbar, ivActionShare, ivActionEdit, ivActionInfo, ivActionDelete).forEach {
+            it.startAnimation(animation)
+            it.visibility = View.GONE
+        }
     }
 
     override fun imageDeleted(deletedPosition: Int) {
