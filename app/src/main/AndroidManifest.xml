@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="by.vshkl.android.piktures">
+          package="by.vshkl.android.pik">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-        android:name=".App"
+        android:name="by.vshkl.android.pik.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme.NoActionBar.Translucent">
 
         <activity
-            android:name="by.vshkl.android.piktures.ui.main.MainActivity"
+            android:name="by.vshkl.android.pik.ui.main.MainActivity"
             android:configChanges="orientation|screenSize">
 
             <intent-filter>
@@ -31,7 +31,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="by.vshkl.android.piktures.provider"
+            android:authorities="by.vshkl.android.pik.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

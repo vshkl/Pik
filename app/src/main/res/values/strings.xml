@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Piktures</string>
+    <string name="app_name">Pik</string>
 
     <string name="main_permission_storage_rationale">EasePic needs storage access to show and modify pictures on device.</string>
     <string name="main_grant">Grant</string>
