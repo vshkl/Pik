@@ -29,7 +29,6 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
         super.onCreate(savedInstanceState)
         currentPosition = arguments.getInt(KEY_START_POSITION, 0)
         imagePagerAdapter = ImagePagerAdapter(arguments.getParcelableArrayList(KEY_IMAGE_LIST))
-        getParentActivity()?.window?.decorView?.setOnSystemUiVisibilityChangeListener(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -56,11 +55,13 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
 
     override fun onResume() {
         super.onResume()
+        getParentActivity()?.window?.decorView?.setOnSystemUiVisibilityChangeListener(this)
         imagePagerAdapter?.imagePagerListener = this
     }
 
     override fun onPause() {
         imagePagerAdapter?.imagePagerListener = null
+        getParentActivity()?.window?.decorView?.setOnSystemUiVisibilityChangeListener(null)
         super.onPause()
     }
 
