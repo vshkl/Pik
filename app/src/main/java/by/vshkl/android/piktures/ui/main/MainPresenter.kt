@@ -2,6 +2,7 @@ package by.vshkl.android.piktures.ui.main
 
 import android.net.Uri
 import android.support.v4.app.Fragment
+import android.view.View
 import by.vshkl.android.piktures.BasePresenter
 import by.vshkl.android.piktures.model.Album
 import by.vshkl.android.piktures.model.Image
@@ -18,8 +19,8 @@ class MainPresenter : BasePresenter<MainView>() {
         viewState.showAlbums()
     }
 
-    fun showAlbum(album: Album?) {
-        viewState.showAlbum(album)
+    fun showAlbum(album: Album?, startSharedView: View?) {
+        viewState.showAlbum(album, startSharedView)
     }
 
     fun showImagePager(images: List<Image>?, startPosition: Int, shouldReplace: Boolean) {

@@ -7,7 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.Fragment
-import android.view.View.*
+import android.view.View
 import by.vshkl.android.piktures.R
 import by.vshkl.android.piktures.model.Album
 import by.vshkl.android.piktures.model.Image
@@ -15,7 +15,6 @@ import by.vshkl.android.piktures.util.Navigation
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.tbruyelle.rxpermissions2.RxPermissions
-
 
 class MainActivity : MvpAppCompatActivity(),
         MainView, OnScanCompletedListener {
@@ -36,7 +35,8 @@ class MainActivity : MvpAppCompatActivity(),
 
     override fun showAlbums() = Navigation.navigateToAlbums(this)
 
-    override fun showAlbum(album: Album?) = Navigation.navigateToAlbum(this, album)
+    override fun showAlbum(album: Album?, startSharedView: View?)
+            = Navigation.navigateToAlbum(this, album, startSharedView)
 
     override fun showImagePager(images: List<Image>?, startPosition: Int, shouldReplace: Boolean)
             = Navigation.navigateToImagePager(this, images, startPosition, shouldReplace)

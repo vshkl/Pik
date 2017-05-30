@@ -5,9 +5,11 @@ import android.content.Intent
 import android.net.Uri
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
+import android.support.v4.view.ViewCompat
+import android.transition.TransitionInflater
+import android.view.View
 import by.vshkl.android.piktures.R
 import by.vshkl.android.piktures.model.Album
 import by.vshkl.android.piktures.model.Image
@@ -18,22 +20,43 @@ import by.vshkl.android.piktures.ui.imagepager.ImagePagerFragment
 import com.yalantis.ucrop.UCrop
 import java.io.File
 
-
 object Navigation {
 
     private val AUTHORITY: String = "by.vshkl.android.piktures.provider"
 
     fun navigateToAlbums(activity: FragmentActivity) {
-        replaceFragment(activity, AlbumsFragment.newInstance(), false, false)
+        val albumsFragment = AlbumsFragment.newInstance()
+        albumsFragment.enterTransition =
+                TransitionInflater.from(activity.baseContext).inflateTransition(android.R.transition.fade)
+        albumsFragment.exitTransition =
+                TransitionInflater.from(activity.baseContext).inflateTransition(android.R.transition.fade)
+        albumsFragment.allowEnterTransitionOverlap = false
+        albumsFragment.allowReturnTransitionOverlap = false
+        replaceFragment(activity, AlbumsFragment.newInstance(), false, false, null)
     }
 
-    fun navigateToAlbum(activity: FragmentActivity, album: Album?) {
-        replaceFragment(activity, AlbumFragment.newInstance(album), true, false)
+    fun navigateToAlbum(activity: FragmentActivity, album: Album?, startSharedView: View?) {
+        val albumFragment = AlbumFragment.newInstance(album)
+        albumFragment.enterTransition =
+                TransitionInflater.from(activity.baseContext).inflateTransition(android.R.transition.fade)
+        albumFragment.exitTransition =
+                TransitionInflater.from(activity.baseContext).inflateTransition(android.R.transition.fade)
+        albumFragment.allowEnterTransitionOverlap = false
+        albumFragment.allowReturnTransitionOverlap = false
+        replaceFragment(activity, albumFragment, true, false, startSharedView)
     }
 
     fun navigateToImagePager(activity: FragmentActivity, images: List<Image>?, startPosition: Int,
                              shouldReplace: Boolean) {
-        replaceFragment(activity, ImagePagerFragment.newInstance(ArrayList(images), startPosition), true, shouldReplace)
+        val imagePagerFragment = ImagePagerFragment.newInstance(ArrayList(images), startPosition)
+        imagePagerFragment.enterTransition =
+                TransitionInflater.from(activity.baseContext).inflateTransition(android.R.transition.fade)
+        imagePagerFragment.exitTransition =
+                TransitionInflater.from(activity.baseContext).inflateTransition(android.R.transition.fade)
+        imagePagerFragment.allowEnterTransitionOverlap = false
+        imagePagerFragment.allowReturnTransitionOverlap = false
+        replaceFragment(activity, ImagePagerFragment.newInstance(ArrayList(images), startPosition), true,
+                shouldReplace, null)
     }
 
     fun showImageInfoDialog(activity: FragmentActivity, imagePath: String?) {
@@ -81,13 +104,16 @@ object Navigation {
     }
 
     private fun replaceFragment(activity: FragmentActivity, fragment: Fragment, addToBackStack: Boolean,
-                                shouldReplace: Boolean) {
+                                shouldReplace: Boolean, startSharedView: View?) {
         val fragmentManager = activity.supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         if (shouldReplace) {
             fragmentManager.popBackStack()
         }
         fragmentTransaction.replace(R.id.flFragmentContainer, fragment, fragment.tag)
+        if (startSharedView != null) {
+            fragmentTransaction.addSharedElement(startSharedView, ViewCompat.getTransitionName(startSharedView))
+        }
         when {
             addToBackStack -> fragmentTransaction.addToBackStack(fragment.tag)
             else -> (0..fragmentManager.backStackEntryCount - 1).forEach { fragmentManager.popBackStack() }

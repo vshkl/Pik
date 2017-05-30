@@ -2,6 +2,7 @@ package by.vshkl.android.piktures.ui.main
 
 import android.net.Uri
 import android.support.v4.app.Fragment
+import android.view.View
 import by.vshkl.android.piktures.model.Album
 import by.vshkl.android.piktures.model.Image
 import com.arellomobile.mvp.MvpView
@@ -12,7 +13,7 @@ interface MainView : MvpView {
 
     fun showAlbums()
 
-    fun showAlbum(album: Album?)
+    fun showAlbum(album: Album?, startSharedView: View?)
 
     fun showImagePager(images: List<Image>?, startPosition: Int, shouldReplace: Boolean)
 

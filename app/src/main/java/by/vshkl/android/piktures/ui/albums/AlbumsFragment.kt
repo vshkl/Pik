@@ -58,7 +58,7 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, AlbumsRenameL
     //---[ Listeners ]--------------------------------------------------------------------------------------------------
 
     override fun onAlbumClicked(album: Album?) {
-        getParentActivity()?.mainPresenter?.showAlbum(album)
+        getParentActivity()?.mainPresenter?.showAlbum(album, rvGallery)
     }
 
     override fun onAlbumSelectionClicked(index: Int) {

@@ -22,4 +22,6 @@
     <string name="image_info_title">Info</string>
     <string name="image_info_details">Details</string>
 
+    <string name="albums_album_shared_element_name">albums_album_shared_element_name</string>
+
 </resources>

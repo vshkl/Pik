@@ -29,7 +29,7 @@ class ImagePagerAdapter(var images: List<Image>?) : PagerAdapter() {
         return view == `object`
     }
 
-    fun getImagePath(position: Int) : List<String> {
+    fun getImagePath(position: Int): List<String> {
         return listOf(images?.get(position)?.image!!)
     }
 }
