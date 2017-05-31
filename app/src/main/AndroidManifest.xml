@@ -23,6 +23,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.imageviewer.ImageViewerActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar.Translucent">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -33,13 +39,7 @@
                 <data android:scheme="file"/>
                 <data android:mimeType="image/*"/>
             </intent-filter>
-
         </activity>
-
-        <activity
-            android:name=".ui.imageviewer.ImageViewerActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar.Translucent"/>
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"

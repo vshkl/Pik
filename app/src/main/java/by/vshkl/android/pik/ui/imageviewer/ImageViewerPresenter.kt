@@ -1,10 +1,14 @@
 package by.vshkl.android.pik.ui.imageviewer
 
+import android.content.Context
 import android.net.Uri
 import android.support.v4.app.Fragment
 import by.vshkl.android.pik.BasePresenter
+import by.vshkl.android.pik.local.Repository
 import by.vshkl.android.pik.model.Image
+import by.vshkl.android.pik.util.RxUtils
 import com.arellomobile.mvp.InjectViewState
+import java.lang.ref.WeakReference
 
 @InjectViewState
 class ImageViewerPresenter : BasePresenter<ImageViewerView>() {
@@ -31,5 +35,13 @@ class ImageViewerPresenter : BasePresenter<ImageViewerView>() {
 
     fun useImageAs(image: Image?) {
         viewState.useImageAs(image)
+    }
+
+    fun getImages(context: Context, imagePath: String) {
+        Repository.getImages(WeakReference(context), imagePath)
+                .compose(RxUtils.applySchedulers())
+                .subscribe({
+                    viewState.showImagePager(it, it.indexOf(it.find { it.image == imagePath }), false, false)
+                })
     }
 }

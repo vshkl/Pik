@@ -1,14 +1,10 @@
 package by.vshkl.android.pik.ui.main
 
-import android.content.Context
 import android.view.View
 import by.vshkl.android.pik.BasePresenter
-import by.vshkl.android.pik.local.Repository
 import by.vshkl.android.pik.model.Album
 import by.vshkl.android.pik.model.Image
-import by.vshkl.android.pik.util.RxUtils
 import com.arellomobile.mvp.InjectViewState
-import java.lang.ref.WeakReference
 
 @InjectViewState
 class MainPresenter : BasePresenter<MainView>() {
@@ -35,13 +31,5 @@ class MainPresenter : BasePresenter<MainView>() {
 
     fun shareImages(imagePaths: List<String>?) {
         viewState.shareImages(imagePaths)
-    }
-
-    fun getImages(context: Context, imagePath: String) {
-        Repository.getImages(WeakReference(context), imagePath)
-                .compose(RxUtils.applySchedulers())
-                .subscribe({
-                    viewState.showImagePager(it, it.indexOf(it.find { it.image == imagePath }), false, false)
-                })
     }
 }

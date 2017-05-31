@@ -25,13 +25,7 @@ class MainActivity : MvpAppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val intent = intent
-        when {
-            intent?.action == Intent.ACTION_VIEW && intent.type.startsWith("image/") ->
-                mainPresenter.getImages(this, intent.data.path ?: "")
-            else -> mainPresenter.checkStoragePermission()
-        }
+        mainPresenter.checkStoragePermission()
     }
 
     //---[ Listeners ]--------------------------------------------------------------------------------------------------

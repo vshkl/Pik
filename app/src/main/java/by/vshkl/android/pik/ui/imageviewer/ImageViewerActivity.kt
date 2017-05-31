@@ -19,10 +19,15 @@ class ImageViewerActivity : MvpAppCompatActivity(), ImageViewerView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_pager)
 
-        if (intent.hasExtra(KEY_IMAGE_LIST) && intent.hasExtra(KEY_START_POSITION)) {
-            val images = intent?.getParcelableArrayListExtra<Image>(KEY_IMAGE_LIST)?.toList()
-            val startPosition = intent?.getIntExtra(KEY_START_POSITION, 0) ?: 0
-            Navigation.navigateToImagePager(this, images, startPosition, false, false)
+        val intent = intent
+        when {
+            intent?.action == Intent.ACTION_VIEW && intent.type.startsWith("image/") ->
+                imageViewerPresenter.getImages(this, intent.data.path ?: "")
+            intent.hasExtra(KEY_IMAGE_LIST) && intent.hasExtra(KEY_START_POSITION) -> {
+                val images = intent?.getParcelableArrayListExtra<Image>(KEY_IMAGE_LIST)?.toList()
+                val startPosition = intent?.getIntExtra(KEY_START_POSITION, 0) ?: 0
+                Navigation.navigateToImagePager(this, images, startPosition, false, false)
+            }
         }
     }
 
