@@ -22,7 +22,7 @@
         />
 
 
-    <TextView
+    <by.vshkl.android.pik.customview.PlayRegularTextView
         android:id="@+id/tvTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
         tools:text="some_image_name.jpg"
         />
 
-    <TextView
+    <by.vshkl.android.pik.customview.PlayRegularTextView
         android:id="@+id/tvSubtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

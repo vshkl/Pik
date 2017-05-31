@@ -35,7 +35,7 @@
         tools:visibility="visible"
         />
 
-    <TextView
+    <by.vshkl.android.pik.customview.PlayRegularTextView
         android:id="@+id/tvAlbumName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
         tools:text="Camera"
         />
 
-    <TextView
+    <by.vshkl.android.pik.customview.PlayRegularTextView
         android:id="@+id/tvAlbumCount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
