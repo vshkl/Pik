@@ -10,7 +10,7 @@ import com.arellomobile.mvp.InjectViewState
 class ImageViewerPresenter : BasePresenter<ImageViewerView>() {
 
     fun showImagePager(images: List<Image>?, startPosition: Int, shouldReplace: Boolean) {
-        viewState.showImagePager(images, startPosition, true, shouldReplace)
+        viewState.showImagePager(images, startPosition, false, shouldReplace)
     }
 
     fun showImageInfo(imagePath: String?) {

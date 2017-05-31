@@ -26,12 +26,10 @@ class ImageViewerActivity : MvpAppCompatActivity(), ImageViewerView {
         }
     }
 
-    //---[ Listeners ]--------------------------------------------------------------------------------------------------
-
     //---[ View implementation ]----------------------------------------------------------------------------------------
 
     override fun showImagePager(images: List<Image>?, startPosition: Int, addToBackStack: Boolean, shouldReplace: Boolean)
-            = Navigation.navigateToImagePagerActivity(this, images, startPosition)
+            = Navigation.navigateToImagePager(this, images, startPosition, addToBackStack, shouldReplace)
 
     override fun showImageInfo(imagePath: String?) = Navigation.showImageInfoDialog(this, imagePath)
 
