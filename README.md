@@ -2,7 +2,7 @@
 
 <img src="https://github.com/vshkl/Pik/blob/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" align="left" width="100" hspace="10" vspace="10">
 
-<br>Pik is a gallery app for android writen in [Kotlin](https://kotlinlang.org/).<br><br><br>
+<br>Pik is a gallery app for android written in [Kotlin](https://kotlinlang.org/).<br><br><br>
 
 ## Screenshots
 
