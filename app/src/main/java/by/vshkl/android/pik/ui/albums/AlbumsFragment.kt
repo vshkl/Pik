@@ -30,6 +30,10 @@ class AlbumsFragment : BaseGalleryFragment(), AlbumsView, AlbumsListener, Albums
         super.onViewCreated(view, savedInstanceState)
         getParentActivity()?.setSupportActionBar(tbToolbar)
         initRecyclerView(savedInstanceState)
+    }
+
+    override fun onStart() {
+        super.onStart()
         albumsPresenter.getAlbums(context)
     }
 

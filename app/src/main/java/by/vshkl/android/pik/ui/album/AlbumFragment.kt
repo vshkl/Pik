@@ -39,6 +39,10 @@ class AlbumFragment : BaseGalleryFragment(), AlbumView, AlbumListener, Selection
         getParentActivity()?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setHasOptionsMenu(true)
         initRecyclerView(savedInstanceState)
+    }
+
+    override fun onStart() {
+        super.onStart()
         albumPresenter.getAlbum(context, album)
     }
 
@@ -147,6 +151,7 @@ class AlbumFragment : BaseGalleryFragment(), AlbumView, AlbumListener, Selection
 
     override fun showAlbum(images: MutableList<Image>) {
         albumAdapter?.setImages(images)
+        albumAdapter?.notifyDataSetChanged()
     }
 
     override fun imagesDeleted(deletedIndexes: Array<Int>?) {
