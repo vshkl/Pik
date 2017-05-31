@@ -79,7 +79,7 @@ class ImagePagerFragment : BasePagerFragment(), ImagePagerView, OnClickListener,
                 return true
             }
             R.id.action_use_as -> {
-//                getParentActivity()?.mainPresenter?.useImageAs(imagePagerAdapter?.images?.get(vpPager.currentItem))
+                getParentActivity()?.imageViewerPresenter?.useImageAs(imagePagerAdapter?.images?.get(vpPager.currentItem))
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -88,15 +88,15 @@ class ImagePagerFragment : BasePagerFragment(), ImagePagerView, OnClickListener,
 
     override fun onClick(v: View?) {
         when (v) {
-//            ivActionShare -> getParentActivity()?.mainPresenter?.shareImages(
-//                    imagePagerAdapter?.getImagePath(vpPager.currentItem))
+            ivActionShare -> getParentActivity()?.imageViewerPresenter?.shareImages(
+                    imagePagerAdapter?.getImagePath(vpPager.currentItem))
             ivActionEdit -> {
                 currentPosition = vpPager.currentItem
-//                getParentActivity()?.mainPresenter?.editImage(
-//                        this, UCrop.REQUEST_CROP, imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
+                getParentActivity()?.imageViewerPresenter?.editImage(
+                        this, UCrop.REQUEST_CROP, imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
             }
-//            ivActionInfo -> getParentActivity()?.mainPresenter?.showImageInfo(
-//                    imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
+            ivActionInfo -> getParentActivity()?.imageViewerPresenter?.showImageInfo(
+                    imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
             ivActionDelete -> imagePagerPresenter.deleteImage(
                     context, imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0), vpPager.currentItem)
         }
@@ -177,6 +177,6 @@ class ImagePagerFragment : BasePagerFragment(), ImagePagerView, OnClickListener,
     }
 
     private fun restartImageViewPager(images: List<Image>?, startPosition: Int, shouldReplace: Boolean) {
-//        getParentActivity()?.mainPresenter?.showImagePager(images, startPosition, shouldReplace)
+        getParentActivity()?.imageViewerPresenter?.showImagePager(images, startPosition, shouldReplace)
     }
 }

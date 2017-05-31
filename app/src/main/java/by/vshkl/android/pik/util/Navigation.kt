@@ -16,14 +16,14 @@ import by.vshkl.android.pik.model.Image
 import by.vshkl.android.pik.ui.album.AlbumFragment
 import by.vshkl.android.pik.ui.albums.AlbumsFragment
 import by.vshkl.android.pik.ui.imageinfo.ImageInfoFragment
-import by.vshkl.android.pik.ui.imagepager.ImagePagerActivity
+import by.vshkl.android.pik.ui.imageviewer.ImageViewerActivity
 import by.vshkl.android.pik.ui.imagepager.ImagePagerFragment
 import com.yalantis.ucrop.UCrop
 import java.io.File
 
 object Navigation {
 
-    private val AUTHORITY: String = "by.vshkl.android.piktures.provider"
+    private val AUTHORITY: String = "by.vshkl.android.pik.provider"
 
     fun navigateToAlbums(activity: FragmentActivity) {
         val albumsFragment = AlbumsFragment.newInstance()
@@ -67,7 +67,7 @@ object Navigation {
     }
 
     fun navigateToImagePagerActivity(context: Context, images: List<Image>?, startPosition: Int) {
-        context.startActivity(ImagePagerActivity.newIntent(context, images, startPosition))
+        context.startActivity(ImageViewerActivity.newIntent(context, images, startPosition))
     }
 
     fun showImageInfoDialog(activity: FragmentActivity, imagePath: String?) {
