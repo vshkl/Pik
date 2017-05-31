@@ -1,6 +1,5 @@
 package by.vshkl.android.pik.ui.album
 
-import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -174,24 +173,10 @@ class AlbumFragment : BaseGalleryFragment(), AlbumView, AlbumListener, Selection
     }
 
     private fun initRecyclerView(savedInstanceState: Bundle?) {
-        var itemDimension = Resources.getSystem().displayMetrics.widthPixels
-
-        val gridLayoutManager: GridLayoutManager
-        when (resources.configuration.orientation) {
-            Configuration.ORIENTATION_LANDSCAPE -> {
-                gridLayoutManager = GridLayoutManager(context, 4)
-                itemDimension /= 4
-            }
-            else -> {
-                gridLayoutManager = GridLayoutManager(context, 3)
-                itemDimension /= 3
-            }
-        }
-
-        albumAdapter = AlbumAdapter(itemDimension)
+        albumAdapter = AlbumAdapter(Resources.getSystem().displayMetrics.widthPixels / 3)
         albumAdapter?.restoreInstanceState(savedInstanceState)
         rvGallery.setHasFixedSize(true)
-        rvGallery.layoutManager = gridLayoutManager
+        rvGallery.layoutManager = GridLayoutManager(context, 3)
         rvGallery.setAdapter(albumAdapter)
     }
 
