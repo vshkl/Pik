@@ -1,5 +1,7 @@
 package by.vshkl.android.pik.util
 
+import android.content.res.Resources
+import android.util.TypedValue
 import com.drew.lang.Rational
 import java.util.*
 
@@ -18,4 +20,8 @@ object DimensionUtils {
 
     fun getReadableExposure(exposure: Rational): String
             = String.format(Locale.getDefault(), "1/%d", (exposure.denominator / exposure.numerator))
+
+    fun px2dp(px: Float): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px, Resources.getSystem().displayMetrics)
+    }
 }

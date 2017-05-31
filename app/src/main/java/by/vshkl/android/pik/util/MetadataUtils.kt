@@ -9,7 +9,7 @@ import io.reactivex.Observable
 import java.io.File
 import java.util.*
 
-object MetadateUtils {
+object MetadataUtils {
 
     fun getImageMetadata(filePath: String): Observable<ImageMetadata>
             = Observable.create({ emitter -> emitter.onNext(readExifInfo(filePath)) })
@@ -28,7 +28,8 @@ object MetadateUtils {
             val fDir = metadata.getFirstDirectoryOfType(FileMetadataDirectory::class.java)
             imageMetadata.fileName = fDir.getString(FileMetadataDirectory.TAG_FILE_NAME)
             imageMetadata.fileSize = fDir.getInteger(FileMetadataDirectory.TAG_FILE_SIZE)
-            imageMetadata.fileDateModified = fDir.getDate(FileMetadataDirectory.TAG_FILE_MODIFIED_DATE, TimeZone.getDefault())
+            imageMetadata.fileDateModified = fDir.getDate(FileMetadataDirectory.TAG_FILE_MODIFIED_DATE,
+                    TimeZone.getDefault())
         }
 
         if (metadata.containsDirectoryOfType(ExifIFD0Directory::class.java)) {

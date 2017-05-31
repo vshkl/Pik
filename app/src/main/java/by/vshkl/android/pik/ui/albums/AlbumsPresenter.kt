@@ -20,7 +20,7 @@ class AlbumsPresenter : BasePresenter<AlbumsView>() {
                 .compose(RxUtils.applySchedulers())
                 .subscribe({
                     viewState.hideLoading()
-                    viewState.showAlbums(it)
+                    viewState.showAlbums(it.toMutableList())
                 }))
     }
 

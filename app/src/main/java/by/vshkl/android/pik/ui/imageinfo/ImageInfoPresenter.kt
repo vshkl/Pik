@@ -8,18 +8,17 @@ import by.vshkl.android.pik.model.ImageInfo
 import by.vshkl.android.pik.model.ImageMetadata
 import by.vshkl.android.pik.util.DateUtils
 import by.vshkl.android.pik.util.DimensionUtils
-import by.vshkl.android.pik.util.MetadateUtils
+import by.vshkl.android.pik.util.MetadataUtils
 import by.vshkl.android.pik.util.RxUtils
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.Observable
 import java.util.*
 
-
 @InjectViewState
 class ImageInfoPresenter : BasePresenter<ImageInfoView>() {
 
     fun getImageInfo(context: Context, imagePath: String) {
-        setDisposable(MetadateUtils.getImageMetadata(imagePath)
+        setDisposable(MetadataUtils.getImageMetadata(imagePath)
                 .compose(RxUtils.applySchedulers())
                 .flatMap { createImageInfoItems(context, it) }
                 .subscribe({ viewState.showImageInfo(it) }))

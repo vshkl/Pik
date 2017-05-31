@@ -32,7 +32,9 @@ object Navigation {
                 TransitionInflater.from(activity.baseContext).inflateTransition(android.R.transition.fade)
         albumsFragment.allowEnterTransitionOverlap = false
         albumsFragment.allowReturnTransitionOverlap = false
-        replaceFragment(activity, AlbumsFragment.newInstance(), false, false, null)
+        replaceFragment(activity = activity,
+                fragment = AlbumsFragment.newInstance(),
+                addToBackStack = false)
     }
 
     fun navigateToAlbum(activity: FragmentActivity, album: Album?, startSharedView: View?) {
@@ -43,7 +45,9 @@ object Navigation {
                 TransitionInflater.from(activity.baseContext).inflateTransition(android.R.transition.fade)
         albumFragment.allowEnterTransitionOverlap = false
         albumFragment.allowReturnTransitionOverlap = false
-        replaceFragment(activity, albumFragment, true, false, startSharedView)
+        replaceFragment(activity = activity,
+                fragment = albumFragment,
+                startSharedView = startSharedView)
     }
 
     fun navigateToImagePager(activity: FragmentActivity, images: List<Image>?, startPosition: Int,
@@ -55,8 +59,10 @@ object Navigation {
                 TransitionInflater.from(activity.baseContext).inflateTransition(android.R.transition.fade)
         imagePagerFragment.allowEnterTransitionOverlap = false
         imagePagerFragment.allowReturnTransitionOverlap = false
-        replaceFragment(activity, ImagePagerFragment.newInstance(ArrayList(images), startPosition), addToBackStack,
-                shouldReplace, null)
+        replaceFragment(activity = activity,
+                fragment = ImagePagerFragment.newInstance(ArrayList(images), startPosition),
+                addToBackStack = addToBackStack,
+                shouldReplace = shouldReplace)
     }
 
     fun showImageInfoDialog(activity: FragmentActivity, imagePath: String?) {
@@ -109,8 +115,8 @@ object Navigation {
         context.startActivity(Intent.createChooser(intent, context.getString(R.string.all_menu_action_use_as)))
     }
 
-    private fun replaceFragment(activity: FragmentActivity, fragment: Fragment, addToBackStack: Boolean,
-                                shouldReplace: Boolean, startSharedView: View?) {
+    private fun replaceFragment(activity: FragmentActivity, fragment: Fragment, addToBackStack: Boolean = true,
+                                shouldReplace: Boolean = false, startSharedView: View? = null) {
         val fragmentManager = activity.supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         if (shouldReplace) {

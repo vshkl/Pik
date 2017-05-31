@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import by.vshkl.android.pik.R
 import by.vshkl.android.pik.model.Album
-import by.vshkl.android.pik.util.Dimentions
+import by.vshkl.android.pik.util.DimensionUtils
 import com.afollestad.dragselectrecyclerview.DragSelectRecyclerViewAdapter
 import com.bumptech.glide.Glide
 
@@ -14,7 +14,7 @@ class AlbumsAdapter(private val itemSize: Int) : DragSelectRecyclerViewAdapter<A
     private var albums: MutableList<Album>? = null
     private var albumsListener: AlbumsListener? = null
     private var isSelectingMode = false
-    private var padding = Dimentions.px2dp(8F).toInt()
+    private var padding = DimensionUtils.px2dp(8F).toInt()
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AlbumsViewHolder
             = AlbumsViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.item_album, parent, false))
