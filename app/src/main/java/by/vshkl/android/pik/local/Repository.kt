@@ -3,6 +3,7 @@ package by.vshkl.android.pik.local
 import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
+import android.os.Environment
 import android.provider.MediaStore.Images.ImageColumns.*
 import android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 import android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI
@@ -17,10 +18,9 @@ import java.util.Collections.emptyList
 
 object Repository {
 
-    private val projectionAlbum = arrayOf(_ID, DATA, DISPLAY_NAME, MIME_TYPE)
-    private val projectionAlbumThumbnail = arrayOf(BUCKET_ID, DATA)
-    private val projectionAlbumRename = arrayOf(BUCKET_ID, DATA, BUCKET_DISPLAY_NAME)
-    private val projectionAlbumCount = arrayOf(BUCKET_ID)
+    private val projectionAlbumContent = arrayOf(_ID, DATA, DISPLAY_NAME, MIME_TYPE)
+    private val projectionAlbumImage = arrayOf(BUCKET_ID, DATA)
+    private val projectionAlbumId = arrayOf(BUCKET_ID)
     private val projectionAlbums = arrayOf(BUCKET_ID, BUCKET_DISPLAY_NAME)
     private val projectionImageDelete = DATA + " = ?"
     private val projectionAll = arrayOf(_ID, DATA, SIZE, DISPLAY_NAME, MIME_TYPE, TITLE, DATE_ADDED, DATE_MODIFIED,
@@ -34,9 +34,13 @@ object Repository {
     private val sortOrderDateDesc = DATE_MODIFIED + " DESC"
     private val sortOrderDateDescOne = DATE_MODIFIED + " DESC LIMIT 1"
 
-    fun getAlbums(contextRef: WeakReference<Context>): Observable<MutableList<Album>> = Observable.create({ emitter ->
-        val albums = getAlbums(contextRef.get()!!, INTERNAL_CONTENT_URI, projectionAlbums, sortOrderDateDesc)
-        albums.addAll(getAlbums(contextRef.get()!!, EXTERNAL_CONTENT_URI, projectionAlbums, sortOrderDateDesc))
+    fun getAlbums(contextRef: WeakReference<Context>): Observable<MutableList<Album>>
+            = Observable.create({ emitter ->
+        val albums: MutableList<Album> = mutableListOf()
+        when (Environment.getExternalStorageState()) {
+            Environment.MEDIA_MOUNTED -> albums.addAll(getAlbums(contextRef.get()!!, EXTERNAL_CONTENT_URI))
+            else -> albums.addAll(getAlbums(contextRef.get()!!, INTERNAL_CONTENT_URI))
+        }
         contextRef.clear()
         emitter.onNext(albums)
     })
@@ -46,7 +50,7 @@ object Repository {
         when (album) {
             null -> emitter.onNext(emptyList())
             else -> {
-                val images = getImages(contextRef.get(), album.storageUri, projectionAlbum, album.id, sortOrderDateDesc)
+                val images = getImagesByAlbumId(contextRef.get(), album.storageUri, album.id)
                 contextRef.clear()
                 emitter.onNext(images)
             }
@@ -55,7 +59,11 @@ object Repository {
 
     fun getImages(contextRef: WeakReference<Context>, imagePath: String): Observable<MutableList<Image>>
             = Observable.create({ emitter ->
-        val images = getImages(contextRef.get()!!, EXTERNAL_CONTENT_URI, imagePath)
+        val images: MutableList<Image> = mutableListOf()
+        when (Environment.getExternalStorageState()) {
+            Environment.MEDIA_MOUNTED -> images.addAll(getImagesByImagePath(contextRef.get()!!, EXTERNAL_CONTENT_URI, imagePath))
+            else -> images.addAll(getImagesByImagePath(contextRef.get()!!, EXTERNAL_CONTENT_URI, imagePath))
+        }
         contextRef.clear()
         emitter.onNext(images)
     })
@@ -76,7 +84,7 @@ object Repository {
             = Observable.create({ emitter ->
         var deletedRows = 0
         albums?.forEach {
-            deletedRows += deleteAlbumFromDisk(contextRef.get(), it.storageUri, projectionAlbumThumbnail, it.id)
+            deletedRows += deleteAlbumFromDisk(contextRef.get(), it.storageUri, it.id)
         }
         contextRef.clear()
         emitter.onNext(deletedRows)
@@ -84,17 +92,16 @@ object Repository {
 
     fun renameAlbum(contextRef: WeakReference<Context>, album: Album?, newName: String): Observable<String>
             = Observable.create({ emitter ->
-        val renamedRows = renameAlbum(contextRef.get(), album?.storageUri!!, projectionAll, album,
-                newName)
+        val renamedRows = renameAlbum(contextRef.get(), album?.storageUri!!, album, newName)
         contextRef.clear()
         emitter.onNext(renamedRows)
     })
 
     //------------------------------------------------------------------------------------------------------------------
 
-    private fun getAlbums(context: Context, storageUri: Uri, projection: Array<String>, sortOrder: String)
+    private fun getAlbums(context: Context, storageUri: Uri)
             : MutableList<Album> {
-        val cursor = context.contentResolver.query(storageUri, projection, null, null, sortOrder)
+        val cursor = context.contentResolver.query(storageUri, projectionAlbums, null, null, sortOrderDateDesc)
 
         val albums: MutableList<Album> = emptyList<Album>().toMutableList()
 
@@ -122,7 +129,7 @@ object Repository {
     }
 
     private fun getAlbumEntryCount(context: Context, storageUri: Uri, albumId: String): Int {
-        val cursor = context.contentResolver.query(storageUri, projectionAlbumCount,
+        val cursor = context.contentResolver.query(storageUri, projectionAlbumId,
                 selectByBucketId, arrayOf(albumId), sortOrderDateDesc)
         val albumEntryCount = cursor.count
         cursor.close()
@@ -130,7 +137,7 @@ object Repository {
     }
 
     private fun getAlbumThumbnail(context: Context, storageUri: Uri, albumId: String): String {
-        val cursor = context.contentResolver.query(storageUri, projectionAlbumThumbnail,
+        val cursor = context.contentResolver.query(storageUri, projectionAlbumImage,
                 selectByBucketId, arrayOf(albumId), sortOrderDateDescOne)
         cursor.moveToFirst()
         val albumThumbnail = cursor.getString(cursor.getColumnIndex(DATA))
@@ -138,9 +145,9 @@ object Repository {
         return albumThumbnail
     }
 
-    private fun getImages(context: Context?, storageUri: Uri, projection: Array<String>, albumId: String,
-                          sortOrder: String): MutableList<Image> {
-        val cursor = context?.contentResolver?.query(storageUri, projection, selectByBucketId, arrayOf(albumId), sortOrder)
+    private fun getImagesByAlbumId(context: Context?, storageUri: Uri, albumId: String): MutableList<Image> {
+        val cursor = context?.contentResolver?.query(storageUri, projectionAlbumContent, selectByBucketId, arrayOf(albumId),
+                sortOrderDateDesc)
 
         val images: MutableList<Image> = emptyList<Image>().toMutableList()
 
@@ -161,8 +168,8 @@ object Repository {
         return images
     }
 
-    private fun getImages(context: Context, storageUri: Uri, imagePath: String): MutableList<Image> {
-        var cursor = context.contentResolver.query(storageUri, projectionAlbumThumbnail, selectByImagePath,
+    private fun getImagesByImagePath(context: Context, storageUri: Uri, imagePath: String): MutableList<Image> {
+        var cursor = context.contentResolver.query(storageUri, projectionAlbumImage, selectByImagePath,
                 arrayOf(imagePath), sortOrderDateDescOne)
 
         if (cursor == null) {
@@ -172,7 +179,7 @@ object Repository {
         val albumId = cursor.getString(cursor.getColumnIndex(BUCKET_ID))
         cursor.close()
 
-        cursor = context.contentResolver.query(storageUri, projectionAlbum, selectByBucketId,
+        cursor = context.contentResolver.query(storageUri, projectionAlbumContent, selectByBucketId,
                 arrayOf(albumId), sortOrderDateDesc)
 
         if (cursor == null) {
@@ -211,12 +218,12 @@ object Repository {
         return context?.contentResolver?.delete(storageUri, projection, arrayOf(imagePath))
     }
 
-    private fun deleteAlbumFromDisk(context: Context?, storageUri: Uri, projection: Array<String>?,
-                                    albumIds: String): Int {
+    private fun deleteAlbumFromDisk(context: Context?, storageUri: Uri, albumIds: String): Int {
         val imagePathsToDelete: MutableList<String> = mutableListOf()
         val albumFileToDelete: File
 
-        val cursor = context?.contentResolver?.query(storageUri, projection, selectByBucketId, arrayOf(albumIds), sortOrderDateDesc)
+        val cursor = context?.contentResolver?.query(storageUri, projectionAlbumImage, selectByBucketId,
+                arrayOf(albumIds), sortOrderDateDesc)
 
         if (cursor == null) {
             return 0
@@ -241,9 +248,8 @@ object Repository {
         return 1
     }
 
-    private fun renameAlbum(context: Context?, storageUri: Uri, projection: Array<String>, album: Album?,
-                            newName: String): String {
-        val cursor = context?.contentResolver?.query(storageUri, projection, selectByBucketId, arrayOf(album?.id),
+    private fun renameAlbum(context: Context?, storageUri: Uri, album: Album?, newName: String): String {
+        val cursor = context?.contentResolver?.query(storageUri, projectionAll, selectByBucketId, arrayOf(album?.id),
                 sortOrderDateDesc)
 
         val rows: MutableList<Row> = emptyList<Row>().toMutableList()
