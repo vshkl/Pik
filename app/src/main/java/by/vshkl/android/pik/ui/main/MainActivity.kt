@@ -25,13 +25,7 @@ class MainActivity : MvpAppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val intent = intent
-        when {
-            intent?.action == Intent.ACTION_VIEW && intent.type.startsWith("image/") ->
-                mainPresenter.getImages(this, intent.data.path ?: "")
-            else -> mainPresenter.checkStoragePermission()
-        }
+        mainPresenter.checkStoragePermission()
     }
 
     //---[ Listeners ]--------------------------------------------------------------------------------------------------
@@ -46,19 +40,11 @@ class MainActivity : MvpAppCompatActivity(),
             = Navigation.navigateToAlbum(this, album, startSharedView)
 
     override fun showImagePager(images: List<Image>?, startPosition: Int, addToBackStack: Boolean, shouldReplace: Boolean)
-            = Navigation.navigateToImagePager(this, images, startPosition, addToBackStack, shouldReplace)
+            = Navigation.navigateToImagePagerActivity(this, images, startPosition)
 
     override fun showImageInfo(imagePath: String?) = Navigation.showImageInfoDialog(this, imagePath)
 
     override fun shareImages(imagePaths: List<String>?) = Navigation.shareImages(this, imagePaths)
-
-    override fun editImage(fragment: Fragment, requestCode: Int, imagePath: String?) {
-        Navigation.editImage(this, fragment, requestCode, imagePath)
-    }
-
-    override fun openMap(locationUri: Uri) = Navigation.openInMap(this, locationUri)
-
-    override fun useImageAs(image: Image?) = Navigation.useImageAs(this, image)
 
     //---[ Other ]------------------------------------------------------------------------------------------------------
 

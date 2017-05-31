@@ -1,6 +1,5 @@
 package by.vshkl.android.pik.ui.album
 
-import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,7 +7,7 @@ import android.support.v7.view.ActionMode
 import android.support.v7.view.ActionMode.Callback
 import android.support.v7.widget.GridLayoutManager
 import android.view.*
-import by.vshkl.android.pik.BaseFragment
+import by.vshkl.android.pik.BaseGalleryFragment
 import by.vshkl.android.pik.R
 import by.vshkl.android.pik.model.Album
 import by.vshkl.android.pik.model.Image
@@ -16,7 +15,7 @@ import com.afollestad.dragselectrecyclerview.DragSelectRecyclerViewAdapter.Selec
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_gallery.*
 
-class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListener, Callback {
+class AlbumFragment : BaseGalleryFragment(), AlbumView, AlbumListener, SelectionListener, Callback {
 
     @InjectPresenter lateinit var albumPresenter: AlbumPresenter
     private var album: Album? = null
@@ -39,6 +38,10 @@ class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListene
         getParentActivity()?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setHasOptionsMenu(true)
         initRecyclerView(savedInstanceState)
+    }
+
+    override fun onStart() {
+        super.onStart()
         albumPresenter.getAlbum(context, album)
     }
 
@@ -147,6 +150,7 @@ class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListene
 
     override fun showAlbum(images: MutableList<Image>) {
         albumAdapter?.setImages(images)
+        albumAdapter?.notifyDataSetChanged()
     }
 
     override fun imagesDeleted(deletedIndexes: Array<Int>?) {
@@ -169,24 +173,10 @@ class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListene
     }
 
     private fun initRecyclerView(savedInstanceState: Bundle?) {
-        var itemDimension = Resources.getSystem().displayMetrics.widthPixels
-
-        val gridLayoutManager: GridLayoutManager
-        when (resources.configuration.orientation) {
-            Configuration.ORIENTATION_LANDSCAPE -> {
-                gridLayoutManager = GridLayoutManager(context, 4)
-                itemDimension /= 4
-            }
-            else -> {
-                gridLayoutManager = GridLayoutManager(context, 3)
-                itemDimension /= 3
-            }
-        }
-
-        albumAdapter = AlbumAdapter(itemDimension)
+        albumAdapter = AlbumAdapter(Resources.getSystem().displayMetrics.widthPixels / 3)
         albumAdapter?.restoreInstanceState(savedInstanceState)
         rvGallery.setHasFixedSize(true)
-        rvGallery.layoutManager = gridLayoutManager
+        rvGallery.layoutManager = GridLayoutManager(context, 3)
         rvGallery.setAdapter(albumAdapter)
     }
 

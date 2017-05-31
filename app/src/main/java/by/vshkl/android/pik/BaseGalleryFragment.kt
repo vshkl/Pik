@@ -5,7 +5,7 @@ import by.vshkl.android.pik.ui.main.MainActivity
 import com.arellomobile.mvp.MvpAppCompatFragment
 import java.lang.ref.WeakReference
 
-open class BaseFragment : MvpAppCompatFragment() {
+open class BaseGalleryFragment : MvpAppCompatFragment() {
 
     private var parentActivityRef: WeakReference<MainActivity>? = null
 

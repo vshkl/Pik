@@ -6,35 +6,12 @@
     android:layout_height="match_parent"
     >
 
-    <View
-        android:id="@+id/vTop"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:layout_gravity="top|start"
-        android:background="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <View
-        android:id="@+id/vBottom"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_gravity="bottom|start"
-        android:background="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/tbToolbar"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_gravity="top|start"
-        android:layout_marginTop="24dp"
-        android:background="@null"
+        android:background="@color/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/AppTheme.AppToolbar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,10 +29,10 @@
         android:visibility="gone"
         app:dsrv_autoScrollEnabled="true"
         app:dsrv_autoScrollHotspotHeight="56dp"
-        app:layout_constraintBottom_toTopOf="@id/vBottom"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vTop"
+        app:layout_constraintTop_toBottomOf="@id/tbToolbar"
         />
 
     <ProgressBar
@@ -64,10 +41,10 @@
         android:layout_height="80dp"
         android:layout_gravity="center"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/vBottom"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vTop"
+        app:layout_constraintTop_toBottomOf="@id/tbToolbar"
         />
 
 </android.support.constraint.ConstraintLayout>

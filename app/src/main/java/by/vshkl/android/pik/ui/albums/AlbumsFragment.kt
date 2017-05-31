@@ -1,6 +1,5 @@
 package by.vshkl.android.pik.ui.albums
 
-import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,7 +7,7 @@ import android.support.v7.view.ActionMode
 import android.support.v7.view.ActionMode.Callback
 import android.support.v7.widget.GridLayoutManager
 import android.view.*
-import by.vshkl.android.pik.BaseFragment
+import by.vshkl.android.pik.BaseGalleryFragment
 import by.vshkl.android.pik.R
 import by.vshkl.android.pik.model.Album
 import by.vshkl.android.pik.util.DialogUtils
@@ -16,7 +15,7 @@ import com.afollestad.dragselectrecyclerview.DragSelectRecyclerViewAdapter.Selec
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_gallery.*
 
-class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, AlbumsRenameListener, SelectionListener, Callback {
+class AlbumsFragment : BaseGalleryFragment(), AlbumsView, AlbumsListener, AlbumsRenameListener, SelectionListener, Callback {
 
     @InjectPresenter lateinit var albumsPresenter: AlbumsPresenter
     private var albumsAdapter: AlbumsAdapter? = null
@@ -30,6 +29,10 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, AlbumsRenameL
         super.onViewCreated(view, savedInstanceState)
         getParentActivity()?.setSupportActionBar(tbToolbar)
         initRecyclerView(savedInstanceState)
+    }
+
+    override fun onStart() {
+        super.onStart()
         albumsPresenter.getAlbums(context)
     }
 
@@ -154,24 +157,10 @@ class AlbumsFragment : BaseFragment(), AlbumsView, AlbumsListener, AlbumsRenameL
     }
 
     private fun initRecyclerView(savedInstanceState: Bundle?) {
-        var itemDimension = Resources.getSystem().displayMetrics.widthPixels
-
-        val gridLayoutManager: GridLayoutManager
-        when (resources.configuration.orientation) {
-            Configuration.ORIENTATION_LANDSCAPE -> {
-                gridLayoutManager = GridLayoutManager(context, 4)
-                itemDimension /= 4
-            }
-            else -> {
-                gridLayoutManager = GridLayoutManager(context, 3)
-                itemDimension /= 3
-            }
-        }
-
-        albumsAdapter = AlbumsAdapter(itemDimension)
+        albumsAdapter = AlbumsAdapter(Resources.getSystem().displayMetrics.widthPixels / 3)
         albumsAdapter?.restoreInstanceState(savedInstanceState)
         rvGallery.setHasFixedSize(true)
-        rvGallery.layoutManager = gridLayoutManager
+        rvGallery.layoutManager = GridLayoutManager(context, 3)
         rvGallery.setAdapter(albumsAdapter)
     }
 
