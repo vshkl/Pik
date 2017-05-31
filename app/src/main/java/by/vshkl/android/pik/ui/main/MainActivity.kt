@@ -58,6 +58,8 @@ class MainActivity : MvpAppCompatActivity(),
 
     override fun openMap(locationUri: Uri) = Navigation.openInMap(this, locationUri)
 
+    override fun useImageAs(image: Image?) = Navigation.useImageAs(this, image)
+
     //---[ Other ]------------------------------------------------------------------------------------------------------
 
     override fun checkStoragePermission() {

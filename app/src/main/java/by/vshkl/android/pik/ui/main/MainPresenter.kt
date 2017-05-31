@@ -47,6 +47,10 @@ class MainPresenter : BasePresenter<MainView>() {
         viewState.openMap(locationUri)
     }
 
+    fun useImageAs(image: Image?) {
+        viewState.useImageAs(image)
+    }
+
     fun getImages(context: Context, imagePath: String) {
         Repository.getImages(WeakReference(context), imagePath)
                 .compose(RxUtils.applySchedulers())

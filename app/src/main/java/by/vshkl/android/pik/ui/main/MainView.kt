@@ -24,4 +24,6 @@ interface MainView : MvpView {
     fun editImage(fragment: Fragment, requestCode: Int, imagePath: String?)
 
     fun openMap(locationUri: Uri)
+
+    fun useImageAs(image: Image?)
 }

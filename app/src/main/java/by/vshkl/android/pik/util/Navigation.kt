@@ -20,6 +20,7 @@ import by.vshkl.android.pik.ui.imagepager.ImagePagerFragment
 import com.yalantis.ucrop.UCrop
 import java.io.File
 
+
 object Navigation {
 
     private val AUTHORITY: String = "by.vshkl.android.piktures.provider"
@@ -101,6 +102,12 @@ object Navigation {
         if (intent.resolveActivity(context.packageManager) != null) {
             context.startActivity(intent)
         }
+    }
+
+    fun useImageAs(context: Context, image: Image?) {
+        val intent = Intent(Intent.ACTION_ATTACH_DATA)
+        intent.setDataAndType(Uri.parse(image?.image), image?.mimeType)
+        context.startActivity(Intent.createChooser(intent, context.getString(R.string.all_menu_action_use_as)))
     }
 
     private fun replaceFragment(activity: FragmentActivity, fragment: Fragment, addToBackStack: Boolean,

@@ -4,11 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.view.View.*
-import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import by.vshkl.android.pik.BaseFragment
 import by.vshkl.android.pik.R
@@ -59,6 +56,10 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
         imagePagerAdapter?.imagePagerListener = this
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_image_pager, menu)
+    }
+
     override fun onPause() {
         imagePagerAdapter?.imagePagerListener = null
         getParentActivity()?.window?.decorView?.setOnSystemUiVisibilityChangeListener(null)
@@ -76,6 +77,10 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
         when (item?.itemId) {
             android.R.id.home -> {
                 activity?.onBackPressed()
+                return true
+            }
+            R.id.action_use_as -> {
+                getParentActivity()?.mainPresenter?.useImageAs(imagePagerAdapter?.images?.get(vpPager.currentItem))
                 return true
             }
             else -> return super.onOptionsItemSelected(item)

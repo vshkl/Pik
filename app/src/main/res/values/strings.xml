@@ -10,6 +10,7 @@
     <string name="all_menu_action_info">Info</string>
     <string name="all_menu_action_rename">Rename</string>
     <string name="all_menu_action_share">Share</string>
+    <string name="all_menu_action_use_as">Use as</string>
 
     <string name="all_action_share_title">Share to…</string>
 
