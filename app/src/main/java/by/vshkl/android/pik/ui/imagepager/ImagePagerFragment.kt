@@ -7,15 +7,14 @@ import android.support.v4.app.Fragment
 import android.view.*
 import android.view.View.*
 import android.view.animation.AlphaAnimation
-import by.vshkl.android.pik.BaseFragment
+import by.vshkl.android.pik.BasePagerFragment
 import by.vshkl.android.pik.R
 import by.vshkl.android.pik.model.Image
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.fragment_image_pager.*
 
-
-class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, ImagePagerListener,
+class ImagePagerFragment : BasePagerFragment(), ImagePagerView, OnClickListener, ImagePagerListener,
         OnSystemUiVisibilityChangeListener {
 
     @InjectPresenter lateinit var imagePagerPresenter: ImagePagerPresenter
@@ -80,7 +79,7 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
                 return true
             }
             R.id.action_use_as -> {
-                getParentActivity()?.mainPresenter?.useImageAs(imagePagerAdapter?.images?.get(vpPager.currentItem))
+//                getParentActivity()?.mainPresenter?.useImageAs(imagePagerAdapter?.images?.get(vpPager.currentItem))
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -89,15 +88,15 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
 
     override fun onClick(v: View?) {
         when (v) {
-            ivActionShare -> getParentActivity()?.mainPresenter?.shareImages(
-                    imagePagerAdapter?.getImagePath(vpPager.currentItem))
+//            ivActionShare -> getParentActivity()?.mainPresenter?.shareImages(
+//                    imagePagerAdapter?.getImagePath(vpPager.currentItem))
             ivActionEdit -> {
                 currentPosition = vpPager.currentItem
-                getParentActivity()?.mainPresenter?.editImage(
-                        this, UCrop.REQUEST_CROP, imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
+//                getParentActivity()?.mainPresenter?.editImage(
+//                        this, UCrop.REQUEST_CROP, imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
             }
-            ivActionInfo -> getParentActivity()?.mainPresenter?.showImageInfo(
-                    imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
+//            ivActionInfo -> getParentActivity()?.mainPresenter?.showImageInfo(
+//                    imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
             ivActionDelete -> imagePagerPresenter.deleteImage(
                     context, imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0), vpPager.currentItem)
         }
@@ -178,6 +177,6 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
     }
 
     private fun restartImageViewPager(images: List<Image>?, startPosition: Int, shouldReplace: Boolean) {
-        getParentActivity()?.mainPresenter?.showImagePager(images, startPosition, shouldReplace)
+//        getParentActivity()?.mainPresenter?.showImagePager(images, startPosition, shouldReplace)
     }
 }

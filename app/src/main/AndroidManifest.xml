@@ -11,11 +11,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar.Translucent">
+        android:theme="@style/AppTheme.NoActionBar">
 
         <activity
             android:name="by.vshkl.android.pik.ui.main.MainActivity"
-            android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -34,6 +35,11 @@
             </intent-filter>
 
         </activity>
+
+        <activity
+            android:name=".ui.imagepager.ImagePagerActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar.Translucent"/>
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"

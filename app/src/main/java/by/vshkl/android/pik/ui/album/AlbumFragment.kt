@@ -8,7 +8,7 @@ import android.support.v7.view.ActionMode
 import android.support.v7.view.ActionMode.Callback
 import android.support.v7.widget.GridLayoutManager
 import android.view.*
-import by.vshkl.android.pik.BaseFragment
+import by.vshkl.android.pik.BaseGalleryFragment
 import by.vshkl.android.pik.R
 import by.vshkl.android.pik.model.Album
 import by.vshkl.android.pik.model.Image
@@ -16,7 +16,7 @@ import com.afollestad.dragselectrecyclerview.DragSelectRecyclerViewAdapter.Selec
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_gallery.*
 
-class AlbumFragment : BaseFragment(), AlbumView, AlbumListener, SelectionListener, Callback {
+class AlbumFragment : BaseGalleryFragment(), AlbumView, AlbumListener, SelectionListener, Callback {
 
     @InjectPresenter lateinit var albumPresenter: AlbumPresenter
     private var album: Album? = null

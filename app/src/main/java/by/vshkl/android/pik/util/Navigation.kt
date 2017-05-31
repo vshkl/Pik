@@ -16,6 +16,7 @@ import by.vshkl.android.pik.model.Image
 import by.vshkl.android.pik.ui.album.AlbumFragment
 import by.vshkl.android.pik.ui.albums.AlbumsFragment
 import by.vshkl.android.pik.ui.imageinfo.ImageInfoFragment
+import by.vshkl.android.pik.ui.imagepager.ImagePagerActivity
 import by.vshkl.android.pik.ui.imagepager.ImagePagerFragment
 import com.yalantis.ucrop.UCrop
 import java.io.File
@@ -63,6 +64,10 @@ object Navigation {
                 fragment = ImagePagerFragment.newInstance(ArrayList(images), startPosition),
                 addToBackStack = addToBackStack,
                 shouldReplace = shouldReplace)
+    }
+
+    fun navigateToImagePagerActivity(context: Context, images: List<Image>?, startPosition: Int) {
+        context.startActivity(ImagePagerActivity.newIntent(context, images, startPosition))
     }
 
     fun showImageInfoDialog(activity: FragmentActivity, imagePath: String?) {
