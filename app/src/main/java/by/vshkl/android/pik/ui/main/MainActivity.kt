@@ -52,14 +52,6 @@ class MainActivity : MvpAppCompatActivity(),
 
     override fun shareImages(imagePaths: List<String>?) = Navigation.shareImages(this, imagePaths)
 
-    override fun editImage(fragment: Fragment, requestCode: Int, imagePath: String?) {
-        Navigation.editImage(this, fragment, requestCode, imagePath)
-    }
-
-    override fun openMap(locationUri: Uri) = Navigation.openInMap(this, locationUri)
-
-    override fun useImageAs(image: Image?) = Navigation.useImageAs(this, image)
-
     //---[ Other ]------------------------------------------------------------------------------------------------------
 
     override fun checkStoragePermission() {

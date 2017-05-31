@@ -1,7 +1,5 @@
 package by.vshkl.android.pik.ui.main
 
-import android.net.Uri
-import android.support.v4.app.Fragment
 import android.view.View
 import by.vshkl.android.pik.model.Album
 import by.vshkl.android.pik.model.Image
@@ -20,10 +18,4 @@ interface MainView : MvpView {
     fun showImageInfo(imagePath: String?)
 
     fun shareImages(imagePaths: List<String>?)
-
-    fun editImage(fragment: Fragment, requestCode: Int, imagePath: String?)
-
-    fun openMap(locationUri: Uri)
-
-    fun useImageAs(image: Image?)
 }
