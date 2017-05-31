@@ -47,7 +47,7 @@ object Navigation {
     }
 
     fun navigateToImagePager(activity: FragmentActivity, images: List<Image>?, startPosition: Int,
-                             shouldReplace: Boolean) {
+                             addToBackStack: Boolean, shouldReplace: Boolean) {
         val imagePagerFragment = ImagePagerFragment.newInstance(ArrayList(images), startPosition)
         imagePagerFragment.enterTransition =
                 TransitionInflater.from(activity.baseContext).inflateTransition(android.R.transition.fade)
@@ -55,7 +55,7 @@ object Navigation {
                 TransitionInflater.from(activity.baseContext).inflateTransition(android.R.transition.fade)
         imagePagerFragment.allowEnterTransitionOverlap = false
         imagePagerFragment.allowReturnTransitionOverlap = false
-        replaceFragment(activity, ImagePagerFragment.newInstance(ArrayList(images), startPosition), true,
+        replaceFragment(activity, ImagePagerFragment.newInstance(ArrayList(images), startPosition), addToBackStack,
                 shouldReplace, null)
     }
 

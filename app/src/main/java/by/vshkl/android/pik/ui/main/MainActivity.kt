@@ -1,6 +1,7 @@
 package by.vshkl.android.pik.ui.main
 
 import android.Manifest
+import android.content.Intent
 import android.media.MediaScannerConnection
 import android.media.MediaScannerConnection.OnScanCompletedListener
 import android.net.Uri
@@ -24,7 +25,13 @@ class MainActivity : MvpAppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mainPresenter.checkStoragePermission()
+
+        val intent = intent
+        when {
+            intent?.action == Intent.ACTION_VIEW && intent.type.startsWith("image/") ->
+                mainPresenter.getImages(this, intent.data.path ?: "")
+            else -> mainPresenter.checkStoragePermission()
+        }
     }
 
     //---[ Listeners ]--------------------------------------------------------------------------------------------------
@@ -38,8 +45,8 @@ class MainActivity : MvpAppCompatActivity(),
     override fun showAlbum(album: Album?, startSharedView: View?)
             = Navigation.navigateToAlbum(this, album, startSharedView)
 
-    override fun showImagePager(images: List<Image>?, startPosition: Int, shouldReplace: Boolean)
-            = Navigation.navigateToImagePager(this, images, startPosition, shouldReplace)
+    override fun showImagePager(images: List<Image>?, startPosition: Int, addToBackStack: Boolean, shouldReplace: Boolean)
+            = Navigation.navigateToImagePager(this, images, startPosition, addToBackStack, shouldReplace)
 
     override fun showImageInfo(imagePath: String?) = Navigation.showImageInfoDialog(this, imagePath)
 

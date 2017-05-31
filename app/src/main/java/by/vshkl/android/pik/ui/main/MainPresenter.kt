@@ -1,12 +1,16 @@
 package by.vshkl.android.pik.ui.main
 
+import android.content.Context
 import android.net.Uri
 import android.support.v4.app.Fragment
 import android.view.View
 import by.vshkl.android.pik.BasePresenter
+import by.vshkl.android.pik.local.Repository
 import by.vshkl.android.pik.model.Album
 import by.vshkl.android.pik.model.Image
+import by.vshkl.android.pik.util.RxUtils
 import com.arellomobile.mvp.InjectViewState
+import java.lang.ref.WeakReference
 
 @InjectViewState
 class MainPresenter : BasePresenter<MainView>() {
@@ -24,7 +28,7 @@ class MainPresenter : BasePresenter<MainView>() {
     }
 
     fun showImagePager(images: List<Image>?, startPosition: Int, shouldReplace: Boolean) {
-        viewState.showImagePager(images, startPosition, shouldReplace)
+        viewState.showImagePager(images, startPosition, true, shouldReplace)
     }
 
     fun showImageInfo(imagePath: String?) {
@@ -41,5 +45,13 @@ class MainPresenter : BasePresenter<MainView>() {
 
     fun openMap(locationUri: Uri) {
         viewState.openMap(locationUri)
+    }
+
+    fun getImages(context: Context, imagePath: String) {
+        Repository.getImages(WeakReference(context), imagePath)
+                .compose(RxUtils.applySchedulers())
+                .subscribe({
+                    viewState.showImagePager(it, it.indexOf(it.find { it.image == imagePath }), false, false)
+                })
     }
 }
