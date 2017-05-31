@@ -89,17 +89,17 @@ class ImagePagerFragment : BaseFragment(), ImagePagerView, OnClickListener, Imag
 
     override fun onClick(v: View?) {
         when (v) {
-            ivActionShare -> getParentActivity()?.mainPresenter
-                    ?.shareImages(imagePagerAdapter?.getImagePath(vpPager.currentItem))
+            ivActionShare -> getParentActivity()?.mainPresenter?.shareImages(
+                    imagePagerAdapter?.getImagePath(vpPager.currentItem))
             ivActionEdit -> {
                 currentPosition = vpPager.currentItem
-                getParentActivity()?.mainPresenter
-                        ?.editImage(this, UCrop.REQUEST_CROP, imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
+                getParentActivity()?.mainPresenter?.editImage(
+                        this, UCrop.REQUEST_CROP, imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
             }
-            ivActionInfo -> getParentActivity()?.mainPresenter
-                    ?.showImageInfo(imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
-            ivActionDelete -> imagePagerPresenter
-                    .deleteImage(context, imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0), vpPager.currentItem)
+            ivActionInfo -> getParentActivity()?.mainPresenter?.showImageInfo(
+                    imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0))
+            ivActionDelete -> imagePagerPresenter.deleteImage(
+                    context, imagePagerAdapter?.getImagePath(vpPager.currentItem)?.get(0), vpPager.currentItem)
         }
     }
 
