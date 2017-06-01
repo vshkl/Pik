@@ -10,6 +10,9 @@ import by.vshkl.android.pik.model.Image
 import by.vshkl.android.pik.util.Navigation
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.r0adkll.slidr.Slidr
+import com.r0adkll.slidr.model.SlidrConfig
+import com.r0adkll.slidr.model.SlidrPosition
 
 class ImageViewerActivity : MvpAppCompatActivity(), ImageViewerView {
 
@@ -18,6 +21,11 @@ class ImageViewerActivity : MvpAppCompatActivity(), ImageViewerView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_pager)
+
+        Slidr.attach(this, SlidrConfig.Builder()
+                .position(SlidrPosition.TOP)
+                .distanceThreshold(0.2F)
+                .build())
 
         val intent = intent
         when {

@@ -84,4 +84,6 @@ dependencies {
     compile 'com.github.yalantis:ucrop:2.2.1-native'
 
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
+
+    compile 'com.r0adkll:slidableactivity:2.0.5'
 }
