@@ -16,7 +16,7 @@ import java.io.File
 import java.lang.ref.WeakReference
 import java.util.Collections.emptyList
 
-object Repository {
+object Storage {
 
     private val projectionAlbumContent = arrayOf(_ID, DATA, DISPLAY_NAME, MIME_TYPE)
     private val projectionAlbumImage = arrayOf(BUCKET_ID, DATA)

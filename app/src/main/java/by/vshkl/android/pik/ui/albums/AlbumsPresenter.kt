@@ -2,7 +2,8 @@ package by.vshkl.android.pik.ui.albums
 
 import android.content.Context
 import by.vshkl.android.pik.BasePresenter
-import by.vshkl.android.pik.local.Repository
+import by.vshkl.android.pik.local.Cache
+import by.vshkl.android.pik.local.Storage
 import by.vshkl.android.pik.model.Album
 import by.vshkl.android.pik.util.RxUtils
 import com.arellomobile.mvp.InjectViewState
@@ -16,16 +17,11 @@ class AlbumsPresenter : BasePresenter<AlbumsView>() {
     }
 
     fun getAlbums(context: Context) {
-        setDisposable(Repository.getAlbums(WeakReference(context))
-                .compose(RxUtils.applySchedulers())
-                .subscribe({
-                    viewState.hideLoading()
-                    viewState.showAlbums(it.toMutableList())
-                }))
+        getAlbumsFromCache(context)
     }
 
     fun deleteAlbums(context: Context, albums: List<Album>?, deletedIndexes: Array<Int>?) {
-        setDisposable(Repository.deleteAlbums(WeakReference(context), albums)
+        setDisposable(Storage.deleteAlbums(WeakReference(context), albums)
                 .compose(RxUtils.applySchedulers())
                 .subscribe({
                     if (it == albums?.size) {
@@ -35,10 +31,35 @@ class AlbumsPresenter : BasePresenter<AlbumsView>() {
     }
 
     fun renameAlbum(context: Context, album: Album?, newName: String, albumPosition: Int) {
-        Repository.renameAlbum(WeakReference(context), album, newName)
+        Storage.renameAlbum(WeakReference(context), album, newName)
                 .compose(RxUtils.applySchedulers())
                 .subscribe({ albumId ->
                     viewState.takeIf { albumId != null }?.onAlbumRenamed(albumId, newName, albumPosition)
                 })
+    }
+
+    private fun getAlbumsFromCache(context: Context) {
+        setDisposable(Cache.getAlbums()
+                .compose(RxUtils.applySchedulers())
+                .subscribe({
+                    getAlbumsFromStorage(context)
+                    viewState.hideLoading()
+                    viewState.showAlbums(it.toMutableList())
+                }))
+    }
+
+    private fun getAlbumsFromStorage(context: Context) {
+        setDisposable(Storage.getAlbums(WeakReference(context))
+                .compose(RxUtils.applySchedulers())
+                .subscribe({
+                    viewState.showAlbums(it.toMutableList())
+                    putAlbumsToCache(it)
+                }))
+    }
+
+    private fun putAlbumsToCache(albums: List<Album>) {
+        setDisposable(Cache.putAlbums(albums)
+                .compose(RxUtils.applySchedulers())
+                .subscribe())
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.support.v4.app.Fragment
 import by.vshkl.android.pik.BasePresenter
-import by.vshkl.android.pik.local.Repository
+import by.vshkl.android.pik.local.Storage
 import by.vshkl.android.pik.model.Image
 import by.vshkl.android.pik.util.RxUtils
 import com.arellomobile.mvp.InjectViewState
@@ -38,7 +38,7 @@ class ImageViewerPresenter : BasePresenter<ImageViewerView>() {
     }
 
     fun getImages(context: Context, imagePath: String) {
-        Repository.getImages(WeakReference(context), imagePath)
+        Storage.getImages(WeakReference(context), imagePath)
                 .compose(RxUtils.applySchedulers())
                 .subscribe({
                     viewState.showImagePager(it, it.indexOf(it.find { it.image == imagePath }), false, false)
