@@ -121,11 +121,9 @@ class AlbumsFragment : BaseGalleryFragment(), AlbumsView, AlbumsListener, Albums
 
     override fun showLoading() {
         pbProgress.visibility = View.VISIBLE
-        rvGallery.visibility = View.GONE
     }
 
     override fun hideLoading() {
-        rvGallery.visibility = View.VISIBLE
         pbProgress.visibility = View.GONE
     }
 

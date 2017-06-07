@@ -43,7 +43,6 @@ class AlbumsPresenter : BasePresenter<AlbumsView>() {
                 .compose(RxUtils.applySchedulers())
                 .subscribe({
                     getAlbumsFromStorage(context)
-                    viewState.hideLoading()
                     viewState.showAlbums(it.toMutableList())
                 }))
     }
@@ -52,6 +51,7 @@ class AlbumsPresenter : BasePresenter<AlbumsView>() {
         setDisposable(Storage.getAlbums(WeakReference(context))
                 .compose(RxUtils.applySchedulers())
                 .subscribe({
+                    viewState.hideLoading()
                     viewState.showAlbums(it.toMutableList())
                     putAlbumsToCache(it)
                 }))
