@@ -5,8 +5,8 @@ import android.os.Parcelable
 
 data class Image(
         val id: Long,
-        var name: String,
-        var image: String,
+        val name: String,
+        val image: String,
         val mimeType: String
 ) : Parcelable {
     companion object {
