@@ -8,6 +8,7 @@ import by.vshkl.android.pik.model.Image
 import by.vshkl.android.pik.util.DimensionUtils
 import com.afollestad.dragselectrecyclerview.DragSelectRecyclerViewAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class AlbumAdapter(private val itemSize: Int) : DragSelectRecyclerViewAdapter<AlbumViewHolder>() {
 
@@ -27,6 +28,7 @@ class AlbumAdapter(private val itemSize: Int) : DragSelectRecyclerViewAdapter<Al
         Glide.with(holder?.itemView?.context)
                 .load(image?.image)
                 .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .override(itemSize, itemSize)
                 .centerCrop()
                 .into(holder?.ivThumbnail)
