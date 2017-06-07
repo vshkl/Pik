@@ -42,18 +42,20 @@ class AlbumsPresenter : BasePresenter<AlbumsView>() {
         setDisposable(Cache.getAlbums()
                 .compose(RxUtils.applySchedulers())
                 .subscribe({
-                    getAlbumsFromStorage(context)
                     viewState.showAlbums(it.toMutableList())
+                    getAlbumsFromStorage(context, it.hashCode())
                 }))
     }
 
-    private fun getAlbumsFromStorage(context: Context) {
+    private fun getAlbumsFromStorage(context: Context, cacheHash: Int) {
         setDisposable(Storage.getAlbums(WeakReference(context))
                 .compose(RxUtils.applySchedulers())
                 .subscribe({
                     viewState.hideLoading()
-                    viewState.showAlbums(it.toMutableList())
-                    putAlbumsToCache(it)
+                    if (cacheHash != it.hashCode()) {
+                        viewState.showAlbums(it.toMutableList())
+                        putAlbumsToCache(it)
+                    }
                 }))
     }
 
