@@ -16,6 +16,8 @@
 #   public *;
 #}
 
+-dontwarn sun.misc.Unsafe
+
 ##### Glide ############################################################################################################
 
 -keep public class * implements com.bumptech.glide.module.GlideModule
