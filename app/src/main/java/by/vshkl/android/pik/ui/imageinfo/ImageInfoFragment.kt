@@ -26,8 +26,8 @@ class ImageInfoFragment : BaseDialogFragment(), ImageInfoView, ImageInfoListener
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater?.inflate(R.layout.fragment_image_info, container, false)
-        tbToolbar = view?.findViewById(R.id.tbToolbar) as Toolbar?
-        rvInfo = view?.findViewById(R.id.rvInfo) as RecyclerView?
+        tbToolbar = view?.findViewById(R.id.tbToolbar)
+        rvInfo = view?.findViewById(R.id.rvInfo)
         initToolbar()
         initRecyclerView()
         return view
